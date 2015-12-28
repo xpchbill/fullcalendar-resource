@@ -1,4 +1,4 @@
-# Active AUI in React
+# Fullcalendar with resource views.
 
 A resource-views plugin of Fullcalendar.
 
