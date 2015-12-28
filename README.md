@@ -1,3 +1,8 @@
+# Active AUI in React
+
+A resource-views plugin of Fullcalendar.
+
+
 ## Dev setup
 
 You should have **gulp** globally installed.
