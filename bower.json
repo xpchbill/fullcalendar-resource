@@ -1,0 +1,41 @@
+{
+  "name": "fullcalendar-resource",
+  "title": "fullcalendar-resource",
+  "version": "0.0.1",
+  "description": "A resource-views plugin of Fullcalendar.",
+  "keywords": [
+    "calendar",
+    "fullcalendar",
+    "fullcalendar-resource"
+  ],
+  "homepage": "",
+  "bugs": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xpchbill/fullcalendar-resource.git"
+  },
+  "license": {
+    "type": "MIT"
+  },
+  "author": {
+    "name": "Bill Xiong"
+  },
+  "copyright": "",
+  "dependencies": {
+    "jquery": ">=1.7.1",
+    "moment": ">=2.5.0"
+  },
+  "devDependencies": {
+    "moment-timezone": "~0.2.1"
+  },
+  "main": [
+    "dist/js/fullcalendar.resource.js"
+  ],
+  "ignore": [
+    "*",
+    "**/.*",
+    "!/dist/**",
+    "!/README.*",
+    "!/fullcalendar/**"
+  ]
+}
