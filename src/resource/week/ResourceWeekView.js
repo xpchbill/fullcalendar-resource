@@ -1,8 +1,8 @@
 "use strict";
 
 import ResourceView from "../common/ResourceView.js";
-import ResourceTimeGrid from "../day/ResourceTimeGrid.js";
-import ResourceDayGrid from "../day/ResourceDayGrid.js";
+import ResourceTimeGrid from "./ResourceTimeGrid.js";
+import ResourceDayGrid from "./ResourceDayGrid.js";
 
 export default class ResourceWeekView extends ResourceView{
 
@@ -13,8 +13,6 @@ export default class ResourceWeekView extends ResourceView{
   constructor(...args){
     super(...args);
   }
-
-  displayView(date) {}
 
   /**
    * @override

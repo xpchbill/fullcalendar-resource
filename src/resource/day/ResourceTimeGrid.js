@@ -1,10 +1,68 @@
 "use strict";
 
 import {TimeGrid} from "../FC.js";
+import HeaderParser from "./temps/header/HeaderParser.js";
+import TimeGridParser from "./temps/timegrid/TimeGridParser.js";
+import SkeletonWraper from "./temps/SkeletonWraper.html";
 import Intro from "./temps/Intro.html";
 import ResourceGridMixin from "../common/ResourceGridMixin.js";
 
 export default class ResourceTimeGrid extends TimeGrid {
+
+  renderHtml(){
+    let parser = new TimeGridParser(this);
+    return parser.parse();
+    // console.log(parser.parse());
+    // return super.renderHtml();
+  }
+
+  /**
+   * Render the header parts.
+   * @override
+   * @return {String} Header Html.
+   */
+  renderHeadHtml() {
+    let parser = new HeaderParser(this);
+    return parser.parse();
+  }
+
+  /**
+   * Compute actual rendered grid column count.
+   * @override DayTableMixin.computeColCnt
+   * @return {Number}
+   */
+  computeColCnt() {
+    return this.getResourcesColCount();
+  }
+
+  /**
+   * @override
+   * @return {String} HTML string
+   */
+  renderSegTable(segs) {
+    // let tableEl = $(SegTable({
+    //   isRTL: this.isRTL
+    // },{
+    //   intro: Intro({}, {
+    //     axisStyle: this.view.axisStyleAttr()
+    //   })
+    // }));
+    // return tableEl;
+    return super.renderSegTable(segs);
+  }
+
+  bookendCells(trEl) {
+    let tds = trEl.children("td");
+    let skWraper = $(SkeletonWraper({
+      isRTL: this.isRTL
+    },{
+      intro: Intro({}, {
+        axisStyle: this.view.axisStyleAttr()
+      })
+    }));
+    skWraper.find(".fc-skeleton-wraper").eq(0).append(tds);
+    trEl.append(skWraper);
+  }
 
   /**
    * @override

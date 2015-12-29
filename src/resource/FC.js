@@ -25,3 +25,6 @@ export let AgendaView = FC.AgendaView;
 
 /* util modules */
 export let htmlEscape = FC.htmlEscape;
+export let moment = FC.moment;
+export let isInt = FC.isInt;
+export let divideDurationByDuration = FC.divideDurationByDuration;

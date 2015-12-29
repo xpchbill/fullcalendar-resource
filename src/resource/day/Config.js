@@ -1,10 +1,9 @@
 "use strict";
 
-import {Calendar} from "../FC.js";
 import ResourceDayView from "./ResourceDayView.js"
 
 /**
- *
+ * Configuration of resource day view.
  */
 export default {
 	type: "agenda",

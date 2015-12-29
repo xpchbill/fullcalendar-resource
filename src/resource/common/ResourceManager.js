@@ -25,6 +25,23 @@ export default class ResourceManager extends Emitter{
     this.fetch();
   }
 
+  getCurrentResource() {
+    let currentResource,
+        resources = this.getResources();
+    if(this.calendar.view.type != "resourceDay"){
+      currentResource = this.currentResource ? this.currentResource : resources[0];
+    }else{
+      currentResource = null;
+    }
+    return currentResource;
+  }
+
+  setCurrentResource(resourceId) {
+    let resource = this.getResourceById(resourceId);
+    this.currentResource = resource;
+    this.trigger('currentResourceChange', resource);
+  }
+
   getResourceById(id) {
     return this.resourcesMap[id];
   }
@@ -65,6 +82,7 @@ export default class ResourceManager extends Emitter{
   _reset() {
     this.resources = [];
     this.resourcesMap = {};
+    this.currentResource = null;
     this.fetchingStatus = new FetchingStatus();
   }
 }

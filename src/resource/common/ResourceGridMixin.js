@@ -1,7 +1,6 @@
 "use strict";
 
 import {Grid, DayTableMixin, htmlEscape} from "../FC.js";
-import HeaderParser from "./temps/HeaderParser.js";
 
 /* Extract common methods between ResourceDayGrid and ResourceTimeGrid */
 export default {
@@ -114,15 +113,6 @@ export default {
   },
 
   /**
-   * Compute actual rendered grid column count.
-   * @override DayTableMixin.computeColCnt
-   * @return {Number}
-   */
-  computeColCnt() {
-    return this.getResourcesColCount();
-  },
-
-  /**
    * Compute the allowed selection span on grid.
    * Don't allow selecting span accross resources.
    * @override Grid.prototype.computeSelectionSpan
@@ -140,17 +130,6 @@ export default {
       selectionSpan.resourceId = startSpan.resourceId;
     }
     return selectionSpan;
-  },
-
-  /**
-   * Render the header parts.
-   * @override
-   * @return {String} Header Html.
-   */
-  renderHeadHtml: function() {
-    let parser = new HeaderParser(this);
-    console.log(parser.parse());
-    return parser.parse();
   }
-  
+
 }

@@ -1,0 +1,36 @@
+<div class="fc-bg">
+	<table>
+    <tr>
+			{{^isRTL}}
+				{{>bgintro}}
+			{{/isRTL}}
+			<td>
+				<table>
+					<tr>
+						{{#bgCellsIterator}}
+			      <td class="{{classes}}" data-date="{{getFormatDate}}"></td>
+						{{/bgCellsIterator}}
+					</tr>
+				</table>
+			</td>
+			{{#isRTL}}
+				{{>bgintro}}
+			{{/isRTL}}
+    </tr>
+	</table>
+</div>
+<div class="fc-slats">
+	<table>
+		{{#slatCellsIterator}}
+			<tr {{^isLabeled}}class="fc-minor"{{/isLabeled}}>
+			{{^isRTL}}
+				<td class="fc-axis fc-time {{widgetContentClass}}" {{>axisStyle}}>{{#isLabeled}}<span>{{getSlatDateFormate}}</span>{{/isLabeled}}</td>
+			{{/isRTL}}
+				<td class="{{widgetContentClass}}"></td>
+			{{#isRTL}}
+				<td class="fc-axis fc-time {{widgetContentClass}}" {{>axisStyle}}>{{#isLabeled}}<span>{{getSlatDateFormate}}</span>{{/isLabeled}}</td>
+			{{/isRTL}}
+			</tr>
+		{{/slatCellsIterator}}
+	</table>
+</div>

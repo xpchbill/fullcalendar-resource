@@ -16,6 +16,10 @@ export default {
   getResourcesCount() {
     let resources = this.getResources();
     return resources.length;
+  },
+
+  getCurrentResource() {
+    return this.rsManager.getCurrentResource();
   }
 
 }

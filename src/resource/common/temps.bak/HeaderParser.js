@@ -19,8 +19,9 @@ export default class HeaderParser extends TempParser{
     this.isRTL = this.ds.isRTL;
     this.daysMoment = this.ds.dayDates;
     this.resources = this.getResources();
+    this.isRsDayView = this.view.type === "resourceDay";
     this.widgetHeaderClass = this.view.widgetHeaderClass;
-    this.rsEmptyArray = new Array(this.ds.getResourcesCount());
+    this.rsEmptyArray = new Array(this.isRsDayView ? this.ds.getResourcesCount() : 1);
   }
 
   /**
@@ -31,7 +32,8 @@ export default class HeaderParser extends TempParser{
   parse() {
     return Header(this, {
       intro: this.getIntro(),
-      colspan: this.getColspan()
+      colspan: this.getColspan(),
+      currentResourceClass: this.getCurrentResourceClass()
     });
   }
 
@@ -58,17 +60,21 @@ export default class HeaderParser extends TempParser{
       resources.reverse();
       return revsResources;
     }
-    console.log(resources);
     return resources;
+  }
+
+  getCurrentResourceClass() {
+    let view = this.view;
+
   }
 
   getColspan() {
     let daysPerRow = this.ds.daysPerRow;
-    return daysPerRow > 1 ? "colspan='" + daysPerRow + "'" : "";
+    return daysPerRow > 1 && this.isRsDayView ? "colspan='" + daysPerRow + "'" : "";
   }
 
   getRowspan() {
-    return this.hasResources() ? "rowspan=2" : "";
+    return this.hasResources() && this.isRsDayView ? "rowspan=2" : "";
   }
 
   dateFormat() {

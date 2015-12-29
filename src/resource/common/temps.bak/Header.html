@@ -14,7 +14,7 @@
         {{/isRTL}}
       </tr>
       {{/hasResources}}
-      {{#hasDayRow}}
+      {{#isRsDayView}}{{#hasDayRow}}
       <tr>
         {{^hasResources}}{{^isRTL}}
           {{>intro}}
@@ -33,7 +33,31 @@
           {{>intro}}
         {{/isRTL}}
       </tr>
-      {{/hasDayRow}}
+      {{/hasDayRow}}{{/isRsDayView}}
     </thead>
   </table>
+  {{^isRsDayView}}
+  <table>
+    <thead>
+      <tr>
+        {{^isRTL}}
+          {{>intro}}
+        {{/isRTL}}
+        {{#rsEmptyArray}}
+          {{#daysMoment}}
+            <th class="fc-rs-day-header {{widgetHeaderClass}} fc-{{dateFormat}}">{{dateFormat}}</th>
+          {{/daysMoment}}
+        {{/rsEmptyArray}}
+        {{^hasResources}}
+          {{#daysMoment}}
+            <th class="fc-rs-day-header {{widgetHeaderClass}} fc-{{dateFormat}}">{{dateFormat}}</th>
+          {{/daysMoment}}
+        {{/hasResources}}
+        {{#isRTL}}
+          {{>intro}}
+        {{/isRTL}}
+      </tr>
+    </thead>
+  </table>
+  {{/isRsDayView}}
 </div>

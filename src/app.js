@@ -18,11 +18,11 @@ export class App{
 				// 		duration: { weeks: 2 }
 				// 	}
 				// },
-	      contentHeight: 'auto',
+	      contentHeight: 700,
 	      minTime: "06:00:00",
 	      maxTime: "20:00:00",
 	      slotDuration: '00:30:00',
-	      allDaySlot: false,
+	      allDaySlot: true,
 	      defaultView: 'resourceDay',
 	      defaultDate: '2015-12-14',
 	      editable: true,
@@ -101,8 +101,8 @@ export class App{
 	      events: [{
 	        id: '1',
 	        resourceId: 'a',
-	        start: '2015-12-14',
-	        end: '2015-12-15',
+	        start: '2015-12-14T08:00:00',
+	        end: '2015-12-14T14:00:00',
 	        title: 'event 1'
 	      }, {
 	        id: '2',
@@ -128,6 +128,7 @@ export class App{
 	        resourceId: 'c',
 	        start: '2015-12-14T08:00:00',
 	        end: '2015-12-14T09:30:00',
+					rendering: 'background',
 	        title: 'event 5'
 	      }, {
 	        id: '6',
@@ -135,7 +136,64 @@ export class App{
 	        start: '2015-12-15T10:00:00',
 	        end: '2015-12-15T15:00:00',
 	        title: 'event 6'
-	      }],
+	      }, {
+	        id: '7',
+	        resourceId: 'c',
+	        start: '2015-12-14T09:00:00',
+	        end: '2015-12-14T11:00:00',
+	        title: 'event 7',
+					rendering: 'background',
+	        color: '#257e4a'
+	      }, {
+	        id: '8',
+	        resourceId: 'a',
+	        start: '2015-12-14',
+	        end: '2015-12-16',
+	        title: 'event 8',
+	        color: '#257e4a'
+	      }/*, {
+	        id: '9',
+	        resourceId: 'a',
+	        start: '2015-12-14',
+	        end: '2015-12-15',
+	        title: 'event 2',
+	        color: '#257e4a'
+	      }, {
+	        id: '10',
+	        resourceId: 'a',
+	        start: '2015-12-14',
+	        end: '2015-12-15',
+	        title: 'event 2',
+	        color: '#257e4a'
+	      }, {
+	        id: '11',
+	        resourceId: 'a',
+	        start: '2015-12-14',
+	        end: '2015-12-15',
+	        title: 'event 2',
+	        color: '#257e4a'
+	      }, {
+	        id: '12',
+	        resourceId: 'a',
+	        start: '2015-12-14',
+	        end: '2015-12-15',
+	        title: 'event 2',
+	        color: '#257e4a'
+	      }, {
+	        id: '13',
+	        resourceId: 'a',
+	        start: '2015-12-14',
+	        end: '2015-12-15',
+	        title: 'event 2',
+	        color: '#257e4a'
+	      }, {
+	        id: '14',
+	        resourceId: 'a',
+	        start: '2015-12-14',
+	        end: '2015-12-15',
+	        title: 'event 2',
+	        color: '#257e4a'
+	      }*/],
 	      select: function(start, end, jsEvent, view, resource) {
 	        console.log(
 	          'select',
