@@ -30,7 +30,7 @@ export default class HeaderParser extends TempParser{
    */
   parse() {
     return Header(this, {
-      intro: this.getIntro(),      
+      intro: this.getIntro(),
       colspan: this.getColspan()
     });
   }

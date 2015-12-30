@@ -1,0 +1,28 @@
+<div class="fc-row fc-week {{widgetContentClass}} fc-rigid">
+	<div class="fc-bg">
+		<table>
+	    <tr>
+				{{^isRTL}}
+					{{>bgintro}}
+				{{/isRTL}}
+				<td>
+					<table>
+						<tr>
+							{{#bgCellsIterator}}
+				      <td class="{{classes}}" data-date="{{getFormatDate}}"></td>
+							{{/bgCellsIterator}}
+						</tr>
+					</table>
+				</td>
+				{{#isRTL}}
+					{{>bgintro}}
+				{{/isRTL}}
+	    </tr>
+		</table>
+	</div>
+	<div class="fc-content-skeleton">
+		<table>
+
+		</table>
+	</div>
+</div>
