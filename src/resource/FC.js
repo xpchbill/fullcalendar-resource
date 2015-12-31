@@ -28,3 +28,16 @@ export let htmlEscape = FC.htmlEscape;
 export let moment = FC.moment;
 export let isInt = FC.isInt;
 export let divideDurationByDuration = FC.divideDurationByDuration;
+export let CoordCache = FC.CoordCache;
+export function matchCellWidths (els) {
+	var maxInnerWidth = 0;
+	els.find('> *').each(function(i, innerEl) {
+		var innerWidth = $(innerEl).outerWidth();
+		if (innerWidth > maxInnerWidth) {
+			maxInnerWidth = innerWidth;
+		}
+	});
+	maxInnerWidth++;
+	els.width(maxInnerWidth);
+	return maxInnerWidth;
+}

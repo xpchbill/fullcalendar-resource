@@ -112,7 +112,7 @@ gulp.task("prodBuild", function(done) {
 });
 
 gulp.task("copylibs", function() {
-  return gulp.src(["./lib/moment/moment.js", "./lib/jquery/dist/jquery.js", "./lib/fullcalendar/**/*.*"], {base: "./lib"})
+  return gulp.src(["./lib/moment/moment.js", "./lib/jquery/dist/jquery.js", "./lib/fullcalendar/**/*.*", "./lib/syncscroll.js"], {base: "./lib"})
     .pipe(gulp.dest("./dist/lib"));
 });
 
@@ -124,8 +124,10 @@ gulp.task("copyFiles", function() {
       "./lib/fullcalendar/fullcalendar*.css",
       "./lib/moment/moment.js",
       "./lib/jquery/dist/jquery.js",
+      "./lib/syncscroll.js",
       "./lib/fullcalendar/fullcalendar.js",
       "./dist/js/fullcalendar.resource.js",
+      "./dist/css/fullcalendar.resource.css",
       "./dist/app.css",
       "./dist/app.js"
     ], {read: false}), {

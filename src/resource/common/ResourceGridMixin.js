@@ -130,6 +130,17 @@ export default {
       selectionSpan.resourceId = startSpan.resourceId;
     }
     return selectionSpan;
+  },
+
+  getTotalColCount() {
+    let resourceCount = this.getResourcesCount(),
+        daysCount = this.dayDates.length;
+    return resourceCount ? resourceCount * daysCount: daysCount;
+  },
+
+  getLimitColWidthAttr() {
+    let limitColWidth = this.view.opt("limitColWidth");
+    return limitColWidth ? "width=" + limitColWidth : "";
   }
 
 }

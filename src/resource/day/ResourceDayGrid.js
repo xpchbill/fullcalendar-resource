@@ -2,10 +2,10 @@
 
 import {DayGrid, htmlEscape} from "../FC.js";
 import DayGridParser from "./temps/daygrid/DayGridParser.js";
+import Skeleton from "../common/temps/Skeleton.html";
 import SkeletonWraper from "./temps/SkeletonWraper.html";
 import Intro from "./temps/Intro.html";
 import ResourceGridMixin from "../common/ResourceGridMixin.js";
-
 export default class ResourceDayGrid extends DayGrid {
 
   /**
@@ -17,8 +17,6 @@ export default class ResourceDayGrid extends DayGrid {
   renderDayRowHtml(row, isRigid) {
     let parser = new DayGridParser(this);
     return parser.parse();
-    // console.log(parser.parse());
-    // return super.renderDayRowHtml(row, isRigid);
   }
 
   /**
@@ -30,17 +28,35 @@ export default class ResourceDayGrid extends DayGrid {
     return this.getResourcesColCount();
   }
 
-  bookendCells(trEl) {
-    let tds = trEl.children("td");
-    let skWraper = $(SkeletonWraper({
-      isRTL: this.isRTL
-    },{
-      intro: Intro({}, {
-        axisStyle: this.view.axisStyleAttr()
-      })
+  bookendCells(){}
+
+  renderFillRow(type, seg, className) {
+    let colCnt = this.colCnt;
+    let startCol = seg.leftCol;
+    let endCol = seg.rightCol + 1;
+
+    className = className || type.toLowerCase();
+
+    let skeletonEl = $(Skeleton({
+      className: className,
+      limitColWidthAttr: this.getLimitColWidthAttr(),
+      totalColIterator: new Array(this.getTotalColCount())
     }));
-    skWraper.find(".fc-skeleton-wraper").eq(0).append(tds);
-    trEl.append(skWraper);
+
+    let trEl = $("<tr>");
+
+    if (startCol > 0) {
+      trEl.append('<td colspan="' + startCol + '"/>');
+    }
+    trEl.append(
+      seg.el.attr('colspan', endCol - startCol)
+    );
+    if (endCol < colCnt) {
+      trEl.append('<td colspan="' + (colCnt - endCol) + '"/>');
+    }
+    skeletonEl.find("tbody").append(trEl);;
+
+    return skeletonEl;
   }
 
   /**
@@ -48,47 +64,47 @@ export default class ResourceDayGrid extends DayGrid {
    * @return {String} HTML
    */
   renderIntroHtml() {
-    return Intro({}, {
-      axisStyle: this.view.axisStyleAttr()
-    });
-  }
-  /**
-   * @override
-   * @param  {Object} Span
-   * @return {Array} Segs
-   */
-  spanToSegs(span) {
-    let rsCount = this.getResourcesCount();
-    let segs = this.sliceRangeByRow(span);
-
-    if (!rsCount) {
-      segs.forEach((sg) => {
-        sg.leftCol = this.isRTL ? seg.lastRowDayIndex : sg.firstRowDayIndex;
-        sg.rightCol = this.isRTL ? seg.firstRowDayIndex : sg.lastRowDayIndex;
+      return Intro({}, {
+        axisStyle: this.view.axisStyleAttr()
       });
-      return segs;
-    } else {
-      let rsSegs = [];
-      segs.forEach((sg) => {
-        let resources = this.getResources();
-        resources.forEach((rs, i) => {
-          if(!span.resourceId || span.resourceId === rs.id){
-            let newSeg = Object.assign({}, sg);
-            newSeg.leftCol = this.getColByRsAndDayIndex(i, this.isRTL ? seg.lastRowDayIndex : sg.firstRowDayIndex);
-            newSeg.rightCol = this.getColByRsAndDayIndex(i, this.isRTL ? seg.firstRowDayIndex : sg.lastRowDayIndex);
-            rsSegs.push(newSeg);
-          }
-        });
-      });
-      return rsSegs;
     }
-  }
-  /**
-   * Add resourse id to Span.
-   * @override
-   * @param  {Object} hit
-   * @return {Object} Span
-   */
+    /**
+     * @override
+     * @param  {Object} Span
+     * @return {Array} Segs
+     */
+  spanToSegs(span) {
+      let rsCount = this.getResourcesCount();
+      let segs = this.sliceRangeByRow(span);
+
+      if (!rsCount) {
+        segs.forEach((sg) => {
+          sg.leftCol = this.isRTL ? seg.lastRowDayIndex : sg.firstRowDayIndex;
+          sg.rightCol = this.isRTL ? seg.firstRowDayIndex : sg.lastRowDayIndex;
+        });
+        return segs;
+      } else {
+        let rsSegs = [];
+        segs.forEach((sg) => {
+          let resources = this.getResources();
+          resources.forEach((rs, i) => {
+            if (!span.resourceId || span.resourceId === rs.id) {
+              let newSeg = Object.assign({}, sg);
+              newSeg.leftCol = this.getColByRsAndDayIndex(i, this.isRTL ? seg.lastRowDayIndex : sg.firstRowDayIndex);
+              newSeg.rightCol = this.getColByRsAndDayIndex(i, this.isRTL ? seg.firstRowDayIndex : sg.lastRowDayIndex);
+              rsSegs.push(newSeg);
+            }
+          });
+        });
+        return rsSegs;
+      }
+    }
+    /**
+     * Add resourse id to Span.
+     * @override
+     * @param  {Object} hit
+     * @return {Object} Span
+     */
   getHitSpan(hit) {
     let span = super.getHitSpan(hit);
     if (this.getResourcesCount()) {
@@ -98,5 +114,4 @@ export default class ResourceDayGrid extends DayGrid {
   }
 
 }
-
 Object.assign(ResourceDayGrid.prototype, ResourceGridMixin);

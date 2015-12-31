@@ -1,5 +1,7 @@
 "use strict";
 
+import "./main.less";
+
 import {Calendar, views} from "./FC.js";
 import DayConfig from "./day/Config.js";
 import WeekConfig from "./week/Config.js";

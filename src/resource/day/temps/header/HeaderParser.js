@@ -21,6 +21,8 @@ export default class HeaderParser extends TempParser{
     this.resources = this.getResources();
     this.widgetHeaderClass = this.view.widgetHeaderClass;
     this.rsEmptyArray = new Array(this.ds.getResourcesCount());
+    this.limitColWidthAttr = this.ds.getLimitColWidthAttr();
+    this.totalColIterator = new Array(this.ds.getTotalColCount());
   }
 
   /**
@@ -30,7 +32,6 @@ export default class HeaderParser extends TempParser{
    */
   parse() {
     return Header(this, {
-      intro: this.getIntro(),      
       colspan: this.getColspan()
     });
   }

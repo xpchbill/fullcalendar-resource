@@ -19,6 +19,8 @@ export default class DayGridParser extends TempParser{
     this.isRTL = this.ds.isRTL;
     this.widgetContentClass = this.view.widgetContentClass;
     this.bgCellsIterator = this.getBgCells();
+    this.limitColWidthAttr = this.ds.getLimitColWidthAttr();
+    this.totalColIterator = new Array(this.ds.getTotalColCount());
   }
 
   /**

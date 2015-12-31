@@ -1,19 +1,45 @@
 "use strict";
 
-import {TimeGrid} from "../FC.js";
+import {TimeGrid, CoordCache, isInt, htmlEscape, divideDurationByDuration} from "../FC.js";
 import HeaderParser from "./temps/header/HeaderParser.js";
 import TimeGridParser from "./temps/timegrid/TimeGridParser.js";
-import SkeletonWraper from "./temps/SkeletonWraper.html";
+import SlatsLabel from "./temps/timegrid/SlatsLabel.html";
+import Skeleton from "../common/temps/Skeleton.html";
 import Intro from "./temps/Intro.html";
 import ResourceGridMixin from "../common/ResourceGridMixin.js";
-
 export default class ResourceTimeGrid extends TimeGrid {
 
-  renderHtml(){
+  renderDates() {
+    this.el.html(this.renderHtml());
+    this.slatsLabelEl.html(this.renderSlatsLabel());
+    this.colEls = this.el.find('.fc-day');
+    this.slatEls = this.slatsLabelEl.find('.fc-slats-output tr');
+
+    this.colCoordCache = new CoordCache({
+      els: this.colEls,
+      isHorizontal: true
+    });
+    this.slatCoordCache = new CoordCache({
+      els: this.slatEls,
+      isVertical: true
+    });
+  }
+
+  updateWidth() {
+    let bgWidth = this.el.children(".fc-bg").children("table").outerWidth();
+    this.el.width(bgWidth);
+  }
+
+  setHeight(totalHeight, isAuto) {
+    this.el.parent(".fc-scroll-bars").height(totalHeight);
+    this.slatsLabelEl.find(".fc-scroll-bars").height(totalHeight);
+  }
+
+  //updateSize(){}
+
+  renderHtml() {
     let parser = new TimeGridParser(this);
     return parser.parse();
-    // console.log(parser.parse());
-    // return super.renderHtml();
   }
 
   /**
@@ -26,6 +52,41 @@ export default class ResourceTimeGrid extends TimeGrid {
     return parser.parse();
   }
 
+  setSlatsLabelEl(el) {
+    this.slatsLabelEl = el;
+  }
+
+  renderSlatsLabel() {
+    return SlatsLabel({
+      slatCellsIterator: this.getSlatCells(),
+      widgetContentClass: this.view.widgetContentClass,
+      getSlatDateFormate() {
+        return htmlEscape(this.date.format(this.labelFormat));
+      }
+    }, {
+      axisStyle: this.view.axisStyleAttr()
+    });
+  }
+
+  getSlatCells() {
+    let maxTime = this.maxTime;
+    let minTime = this.minTime;
+    let slotTime = moment.duration(+minTime);
+    let slatCells = [];
+
+    while (slotTime < maxTime) {
+      let slotDate = this.start.clone().time(slotTime);
+      let isLabeled = isInt(divideDurationByDuration(slotTime, this.labelInterval));
+      slatCells.push({
+        date: slotDate,
+        isLabeled: isLabeled,
+        labelFormat: this.labelFormat
+      });
+      slotTime.add(this.slotDuration);
+    }
+    return slatCells;
+  }
+
   /**
    * Compute actual rendered grid column count.
    * @override DayTableMixin.computeColCnt
@@ -35,33 +96,77 @@ export default class ResourceTimeGrid extends TimeGrid {
     return this.getResourcesColCount();
   }
 
-  /**
-   * @override
-   * @return {String} HTML string
-   */
+  bookendCells(){}
+
   renderSegTable(segs) {
-    // let tableEl = $(SegTable({
-    //   isRTL: this.isRTL
-    // },{
-    //   intro: Intro({}, {
-    //     axisStyle: this.view.axisStyleAttr()
-    //   })
-    // }));
-    // return tableEl;
-    return super.renderSegTable(segs);
+    let tableEl = $(Skeleton({
+      className: "content",
+      limitColWidthAttr: this.getLimitColWidthAttr(),
+      totalColIterator: new Array(this.getTotalColCount())
+    })).children("table");
+
+    let trEl = $("<tr>");
+    let segCols = this.groupSegCols(segs);
+
+    this.computeSegVerticals(segs);
+    for (let col = 0; col < segCols.length; col++) {
+      let colSegs = segCols[col];
+      this.placeSlotSegs(colSegs);
+      let containerEl = $('<div class="fc-event-container"/>');
+      for (let i = 0; i < colSegs.length; i++) {
+        let seg = colSegs[i];
+        seg.el.css(this.generateSegPositionCss(seg));
+        if (seg.bottom - seg.top < 30) {
+          seg.el.addClass('fc-short');
+        }
+        containerEl.append(seg.el);
+      }
+      trEl.append($('<td/>').append(containerEl));
+    }
+    tableEl.children("tbody").append(trEl);
+
+    return tableEl;
   }
 
-  bookendCells(trEl) {
-    let tds = trEl.children("td");
-    let skWraper = $(SkeletonWraper({
-      isRTL: this.isRTL
-    },{
-      intro: Intro({}, {
-        axisStyle: this.view.axisStyleAttr()
-      })
-    }));
-    skWraper.find(".fc-skeleton-wraper").eq(0).append(tds);
-    trEl.append(skWraper);
+  renderFill(type, segs, className) {
+    if (segs.length) {
+
+      segs = this.renderFillSegEls(type, segs);
+      let segCols = this.groupSegCols(segs);
+
+      let className = className || type.toLowerCase();
+      let skeletonEl = $(Skeleton({
+        className: className,
+        limitColWidthAttr: this.getLimitColWidthAttr(),
+        totalColIterator: new Array(this.getTotalColCount())
+      }));
+
+      let trEl = $('<tr>');
+
+      for (let col = 0; col < segCols.length; col++) {
+        let colSegs = segCols[col];
+        let tdEl = $('<td/>').appendTo(trEl);
+
+        if (colSegs.length) {
+          let containerEl = $('<div class="fc-' + className + '-container"/>').appendTo(tdEl);
+          let dayDate = this.getCellDate(0, col); // row=0
+
+          for (let i = 0; i < colSegs.length; i++) {
+            let seg = colSegs[i];
+            containerEl.append(
+              seg.el.css({
+                top: this.computeDateTop(seg.start, dayDate),
+                bottom: -this.computeDateTop(seg.end, dayDate) // the y position of the bottom edge
+              })
+            );
+          }
+        }
+      }
+      skeletonEl.find("tbody").append(trEl);
+      this.el.append(skeletonEl);
+      this.elsByFill[type] = skeletonEl;
+    }
+    return segs;
   }
 
   /**
@@ -71,7 +176,7 @@ export default class ResourceTimeGrid extends TimeGrid {
   renderBgIntroHtml() {
     return Intro({
       widgetContentClass: this.view.widgetContentClass
-    },{
+    }, {
       axisStyle: this.view.axisStyleAttr()
     });
   }
@@ -123,7 +228,7 @@ export default class ResourceTimeGrid extends TimeGrid {
       segs.forEach((sg) => {
         let resources = this.getResources();
         resources.forEach((rs, i) => {
-          if(!span.resourceId || span.resourceId === rs.id){
+          if (!span.resourceId || span.resourceId === rs.id) {
             let newSeg = Object.assign({}, sg);
             newSeg.col = this.getColByRsAndDayIndex(i, sg.dayIndex);
             rsSegs.push(newSeg);
@@ -149,5 +254,4 @@ export default class ResourceTimeGrid extends TimeGrid {
   }
 
 }
-
 Object.assign(ResourceTimeGrid.prototype, ResourceGridMixin)

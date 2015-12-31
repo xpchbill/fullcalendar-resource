@@ -11,5 +11,5 @@ export default {
 	"defaults": {
 		"buttonText": "rsweek"
 	},
-	duration: { weeks: 1 }
+	duration: { day: 3 }
 }
