@@ -9,10 +9,8 @@ var del = require("del");
 var webpack = require("webpack");
 var bs = require("browser-sync").create();
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 
 var DEV = 1, PROD = 2;
-var fullcalendarDir = "./fullcalendar/";
 
 function build(mode, done) {
   var opts = {
@@ -22,7 +20,7 @@ function build(mode, done) {
     },
     output: {
       path: "dist/js",
-      filename: mode === DEV ? "[name].js" : "[name].[hash].js"
+      filename: mode === DEV ? "[name].js" : "[name].min.js"
     },
     module: {
       loaders: [
@@ -56,7 +54,7 @@ function build(mode, done) {
     },
     plugins: [
       new ExtractTextPlugin(
-        mode === DEV ? "../css/[name].css" : "../css/[name].[hash].css",
+        mode === DEV ? "../css/[name].css" : "../css/[name].min.css",
         {allChunks: true}
       )
     ]
@@ -96,11 +94,11 @@ gulp.task("clean", function(done) {
 });
 
 gulp.task("watch", function(done) {
-  return runSeq("clean", "watchBuild", "copylibs", "copyFiles", "browserSync", done);
+  return runSeq("clean", "watchBuild", "devCopyLibs", "copyInjectedFiles", "browserSync", done);
 });
 
 gulp.task("prod", function(done) {
-  return runSeq("clean", "prodBuild", /*"copyFiles",*/ done);
+  return runSeq("clean", "prodBuild", "prodCopyLibs", "copyInjectedFiles", "browserSync", done);
 });
 
 gulp.task("watchBuild", function(done) {
@@ -111,24 +109,50 @@ gulp.task("prodBuild", function(done) {
   return build(PROD, done);
 });
 
-gulp.task("copylibs", function() {
-  return gulp.src(["./lib/moment/moment.js", "./lib/jquery/dist/jquery.js", "./lib/fullcalendar/**/*.*"], {base: "./lib"})
+function copyLibs(mode, done) {
+  var list = [
+    mode === DEV ? "./lib/moment/moment.js" : "./lib/moment/min/moment.min.js",
+    mode === DEV ? "./lib/jquery/dist/jquery.js" : "./lib/jquery/dist/jquery.min.js"
+  ];
+  if(mode === DEV){
+    list = list.concat([
+      "./lib/fullcalendar/*.js",
+      "./lib/fullcalendar/*.css",
+      "./lib/fullcalendar/*.map",
+      "./lib/fullcalendar/src/**/*.*"
+    ]);
+  }else{
+    list = list.concat([
+      "./lib/fullcalendar/dist/fullcalendar.min.*",
+      "./lib/fullcalendar/dist/fullcalendar.print.css"
+    ]);
+  }
+  return gulp.src(list, {base: "./lib"})
     .pipe(gulp.dest("./dist/lib"));
+}
+
+gulp.task("devCopyLibs", function(done) {
+  return copyLibs(DEV, done);
 });
 
-gulp.task("copyFiles", function() {
+gulp.task("prodCopyLibs", function(done) {
+  return copyLibs(PROD, done);
+});
+
+gulp.task("copyInjectedFiles", function(done) {
   return gulp.src("src/index.html")
     .pipe(changed("dist"))
     .pipe(gulp.dest("dist"))
     .pipe(inject(gulp.src([
-      "./lib/fullcalendar/fullcalendar*.css",
-      "./lib/moment/moment.js",
-      "./lib/jquery/dist/jquery.js",
-      "./lib/fullcalendar/fullcalendar.js",
-      "./dist/js/fullcalendar.resource.js",
-      "./dist/css/fullcalendar.resource.css",
-      "./dist/app.css",
-      "./dist/app.js"
+      "./dist/lib/fullcalendar/**/fullcalendar*.css",
+      "./dist/lib/moment/moment.js",
+      "./dist/lib/moment/*/moment*.js",
+      "./dist/lib/jquery/dist/jquery*.js",
+      "./dist/lib/fullcalendar/**/fullcalendar*.js",
+      "./dist/js/fullcalendar.resource*.js",
+      "./dist/css/fullcalendar.resource*.css",
+      "./dist/app*.css",
+      "./dist/app*.js"
     ], {read: false}), {
       ignorePath: "dist/",
       transform: function (filepath) {

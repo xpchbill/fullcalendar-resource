@@ -152,8 +152,6 @@ export default class ResourceTimeGrid extends TimeGrid {
 
           for (let i = 0; i < colSegs.length; i++) {
             let seg = colSegs[i];
-            console.log(this.computeDateTop(seg.start, dayDate));
-            console.log(-this.computeDateTop(seg.end, dayDate));
             containerEl.append(
               seg.el.css({
                 top: this.computeDateTop(seg.start, dayDate),
