@@ -4,9 +4,9 @@ import {TimeGrid, CoordCache, isInt, htmlEscape, divideDurationByDuration} from 
 import HeaderParser from "./temps/header/HeaderParser.js";
 import TimeGridParser from "./temps/timegrid/TimeGridParser.js";
 import SlatsLabel from "./temps/timegrid/SlatsLabel.html";
-import Skeleton from "../common/temps/Skeleton.html";
-import Intro from "./temps/Intro.html";
+import EventSkeleton from "../common/temps/EventSkeleton.html";
 import ResourceGridMixin from "../common/ResourceGridMixin.js";
+
 export default class ResourceTimeGrid extends TimeGrid {
 
   renderDates() {
@@ -28,14 +28,13 @@ export default class ResourceTimeGrid extends TimeGrid {
   updateWidth() {
     let bgWidth = this.el.children(".fc-bg").children("table").outerWidth();
     this.el.width(bgWidth);
+    this.view.headContainerEl.width(bgWidth);
   }
 
   setHeight(totalHeight, isAuto) {
     this.el.parent(".fc-scroll-bars").height(totalHeight);
     this.slatsLabelEl.find(".fc-scroll-bars").height(totalHeight);
   }
-
-  //updateSize(){}
 
   renderHtml() {
     let parser = new TimeGridParser(this);
@@ -49,7 +48,7 @@ export default class ResourceTimeGrid extends TimeGrid {
    */
   renderHeadHtml() {
     let parser = new HeaderParser(this);
-    return parser.parse();
+    return this.headerGrid = $(parser.parse());
   }
 
   setSlatsLabelEl(el) {
@@ -99,7 +98,7 @@ export default class ResourceTimeGrid extends TimeGrid {
   bookendCells(){}
 
   renderSegTable(segs) {
-    let tableEl = $(Skeleton({
+    let tableEl = $(EventSkeleton({
       className: "content",
       limitColWidthAttr: this.getLimitColWidthAttr(),
       totalColIterator: new Array(this.getTotalColCount())
@@ -135,7 +134,7 @@ export default class ResourceTimeGrid extends TimeGrid {
       let segCols = this.groupSegCols(segs);
 
       let className = className || type.toLowerCase();
-      let skeletonEl = $(Skeleton({
+      let skeletonEl = $(EventSkeleton({
         className: className,
         limitColWidthAttr: this.getLimitColWidthAttr(),
         totalColIterator: new Array(this.getTotalColCount())
@@ -153,6 +152,8 @@ export default class ResourceTimeGrid extends TimeGrid {
 
           for (let i = 0; i < colSegs.length; i++) {
             let seg = colSegs[i];
+            console.log(this.computeDateTop(seg.start, dayDate));
+            console.log(-this.computeDateTop(seg.end, dayDate));
             containerEl.append(
               seg.el.css({
                 top: this.computeDateTop(seg.start, dayDate),
@@ -167,28 +168,6 @@ export default class ResourceTimeGrid extends TimeGrid {
       this.elsByFill[type] = skeletonEl;
     }
     return segs;
-  }
-
-  /**
-   * @override
-   * @return {String} HTML
-   */
-  renderBgIntroHtml() {
-    return Intro({
-      widgetContentClass: this.view.widgetContentClass
-    }, {
-      axisStyle: this.view.axisStyleAttr()
-    });
-  }
-
-  /**
-   * @override
-   * @return {String} HTML
-   */
-  renderIntroHtml() {
-    return Intro({}, {
-      axisStyle: this.view.axisStyleAttr()
-    });
   }
 
   /**

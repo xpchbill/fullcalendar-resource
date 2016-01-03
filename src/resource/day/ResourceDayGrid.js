@@ -2,10 +2,9 @@
 
 import {DayGrid, htmlEscape} from "../FC.js";
 import DayGridParser from "./temps/daygrid/DayGridParser.js";
-import Skeleton from "../common/temps/Skeleton.html";
-import SkeletonWraper from "./temps/SkeletonWraper.html";
-import Intro from "./temps/Intro.html";
+import EventSkeleton from "../common/temps/EventSkeleton.html";
 import ResourceGridMixin from "../common/ResourceGridMixin.js";
+
 export default class ResourceDayGrid extends DayGrid {
 
   /**
@@ -28,6 +27,11 @@ export default class ResourceDayGrid extends DayGrid {
     return this.getResourcesColCount();
   }
 
+  updateWidth() {
+    let bgWidth = this.el.find(".fc-bg > table").outerWidth();
+    this.el.width(bgWidth);
+  }
+
   bookendCells(){}
 
   renderFillRow(type, seg, className) {
@@ -37,7 +41,7 @@ export default class ResourceDayGrid extends DayGrid {
 
     className = className || type.toLowerCase();
 
-    let skeletonEl = $(Skeleton({
+    let skeletonEl = $(EventSkeleton({
       className: className,
       limitColWidthAttr: this.getLimitColWidthAttr(),
       totalColIterator: new Array(this.getTotalColCount())
@@ -61,50 +65,42 @@ export default class ResourceDayGrid extends DayGrid {
 
   /**
    * @override
-   * @return {String} HTML
+   * @param  {Object} Span
+   * @return {Array} Segs
    */
-  renderIntroHtml() {
-      return Intro({}, {
-        axisStyle: this.view.axisStyleAttr()
-      });
-    }
-    /**
-     * @override
-     * @param  {Object} Span
-     * @return {Array} Segs
-     */
   spanToSegs(span) {
-      let rsCount = this.getResourcesCount();
-      let segs = this.sliceRangeByRow(span);
+    let rsCount = this.getResourcesCount();
+    let segs = this.sliceRangeByRow(span);
 
-      if (!rsCount) {
-        segs.forEach((sg) => {
-          sg.leftCol = this.isRTL ? seg.lastRowDayIndex : sg.firstRowDayIndex;
-          sg.rightCol = this.isRTL ? seg.firstRowDayIndex : sg.lastRowDayIndex;
+    if (!rsCount) {
+      segs.forEach((sg) => {
+        sg.leftCol = this.isRTL ? seg.lastRowDayIndex : sg.firstRowDayIndex;
+        sg.rightCol = this.isRTL ? seg.firstRowDayIndex : sg.lastRowDayIndex;
+      });
+      return segs;
+    } else {
+      let rsSegs = [];
+      segs.forEach((sg) => {
+        let resources = this.getResources();
+        resources.forEach((rs, i) => {
+          if (!span.resourceId || span.resourceId === rs.id) {
+            let newSeg = Object.assign({}, sg);
+            newSeg.leftCol = this.getColByRsAndDayIndex(i, this.isRTL ? seg.lastRowDayIndex : sg.firstRowDayIndex);
+            newSeg.rightCol = this.getColByRsAndDayIndex(i, this.isRTL ? seg.firstRowDayIndex : sg.lastRowDayIndex);
+            rsSegs.push(newSeg);
+          }
         });
-        return segs;
-      } else {
-        let rsSegs = [];
-        segs.forEach((sg) => {
-          let resources = this.getResources();
-          resources.forEach((rs, i) => {
-            if (!span.resourceId || span.resourceId === rs.id) {
-              let newSeg = Object.assign({}, sg);
-              newSeg.leftCol = this.getColByRsAndDayIndex(i, this.isRTL ? seg.lastRowDayIndex : sg.firstRowDayIndex);
-              newSeg.rightCol = this.getColByRsAndDayIndex(i, this.isRTL ? seg.firstRowDayIndex : sg.lastRowDayIndex);
-              rsSegs.push(newSeg);
-            }
-          });
-        });
-        return rsSegs;
-      }
+      });
+      return rsSegs;
     }
-    /**
-     * Add resourse id to Span.
-     * @override
-     * @param  {Object} hit
-     * @return {Object} Span
-     */
+  }
+
+  /**
+   * Add resourse id to Span.
+   * @override
+   * @param  {Object} hit
+   * @return {Object} Span
+   */
   getHitSpan(hit) {
     let span = super.getHitSpan(hit);
     if (this.getResourcesCount()) {

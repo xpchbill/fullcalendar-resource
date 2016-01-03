@@ -3,6 +3,7 @@
 import {htmlEscape} from "../../../FC.js";
 import TempParser from "../../../tools/TempParser.js";
 import TimeGrid from "./TimeGrid.html";
+
 export default class TimeGridParser extends TempParser {
 
   /**
@@ -14,11 +15,9 @@ export default class TimeGridParser extends TempParser {
   constructor(rsGridContext) {
     super(rsGridContext);
     this.view = this.ds.view;
-    this.isRTL = this.ds.isRTL;
     this.widgetContentClass = this.view.widgetContentClass;
     this.bgCellsIterator = this.getBgCells();
     this.slatCellsIterator = this.ds.getSlatCells();
-    this.daysMoment = this.ds.dayDates;
     this.limitColWidthAttr = this.ds.getLimitColWidthAttr();
     this.totalColIterator = new Array(this.ds.getTotalColCount());
   }

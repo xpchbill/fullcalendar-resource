@@ -16,13 +16,7 @@
 	<table>
 		{{#slatCellsIterator}}
 			<tr {{^isLabeled}}class="fc-minor"{{/isLabeled}}>
-			<!-- {{^isRTL}}
-				<td class="fc-axis fc-time {{widgetContentClass}}" {{>axisStyle}}>{{#isLabeled}}<span>{{getSlatDateFormate}}</span>{{/isLabeled}}</td>
-			{{/isRTL}} -->
 				<td class="{{widgetContentClass}}"></td>
-			<!-- {{#isRTL}}
-				<td class="fc-axis fc-time {{widgetContentClass}}" {{>axisStyle}}>{{#isLabeled}}<span>{{getSlatDateFormate}}</span>{{/isLabeled}}</td>
-			{{/isRTL}} -->
 			</tr>
 		{{/slatCellsIterator}}
 	</table>

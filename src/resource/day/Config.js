@@ -10,8 +10,8 @@ export default {
 	"class": ResourceDayView,
 	"defaults": {
 		"fixedAxisWidth": 50,
-		"limitColWidth": 200,
+		"limitColWidth": 190,
 		"buttonText": "rsday"
 	},
-	duration: { days: 2 }
+	duration: { days: 1 }
 }

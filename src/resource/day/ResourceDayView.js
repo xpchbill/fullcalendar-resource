@@ -5,6 +5,7 @@ import ResourceView from "../common/ResourceView.js";
 import ResourceTimeGrid from "./ResourceTimeGrid.js";
 import ResourceDayGrid from "./ResourceDayGrid.js";
 import SkeletonParser from "./temps/skeleton/SkeletonParser.js";
+import SyncScrollers from "../tools/SyncScrollers.js";
 
 export default class ResourceDayView extends ResourceView {
 
@@ -19,9 +20,7 @@ export default class ResourceDayView extends ResourceView {
 
   renderSkeletonHtml() {
     let skeletonParser = new SkeletonParser(this);
-    console.log(skeletonParser.parse());
     return skeletonParser.parse()
-      // return super.renderSkeletonHtml();
   }
 
   renderDates() {
@@ -32,12 +31,13 @@ export default class ResourceDayView extends ResourceView {
     if (this.dayGrid) {
       this.dayGrid.renderDates();
     }
+    this.syncScroll();
   }
 
   renderHead() {
     this.headContainerEl =
       this.el.find(".fc-header-output")
-      .html(this.timeGrid.renderHeadHtml());
+      .append(this.timeGrid.renderHeadHtml());
     this.headRowEl = this.headContainerEl.find(".fc-row");
   }
 
@@ -47,15 +47,11 @@ export default class ResourceDayView extends ResourceView {
 
   setGridElement() {
     this.timeGrid.setElement(this.el.find('tbody .fc-time-grid-output'));
-    this.timeGrid.setSlatsLabelEl(this.el.find('tbody .fc-slats-labels'));
+    this.timeGrid.setSlatsLabelEl(this.el.find('tbody .fc-slats-labels-container'));
     if (this.dayGrid) {
       this.dayGrid.setElement(this.el.find('tbody .fc-day-grid-output'));
     }
   }
-
-  // updateWidth() {
-  // 	this.axisWidth = matchCellWidths(this.el.find('.fc-slats-labels tr'));
-  // }
 
   axisStyleAttr() {
     let fixedAxisWidth = this.opt("fixedAxisWidth");
@@ -68,9 +64,19 @@ export default class ResourceDayView extends ResourceView {
     return "";
   }
 
+  updateSize(isResize) {
+    super.updateSize(isResize);
+    let timeGridScrollEl = this.timeGrid.el.parent(".fc-scroll-bars");
+    let timeGridHasScrollBar = SyncScrollers.hasScrollbar(timeGridScrollEl[0], "y");
+    this.el[timeGridHasScrollBar ? "addClass" : "removeClass"]("time-grid-has-scrollbar");
+  }
+
   updateWidth() {
     super.updateWidth();
     this.timeGrid.updateWidth();
+    if (this.dayGrid) {
+      this.dayGrid.updateWidth();
+    }
   }
 
   setHeight(totalHeight, isAuto) {
@@ -78,6 +84,21 @@ export default class ResourceDayView extends ResourceView {
     if (this.dayGrid) {
       //this.dayGrid.setHeight(totalHeight, isAuto);
     }
+  }
+
+  syncScroll() {
+    let headerScrollEl= this.headContainerEl.parent(".fc-scroll-bars").css("padding-right", "21px"),
+        timeGridScrollEl = this.timeGrid.el.parent(".fc-scroll-bars");
+
+    let scrollersX = [timeGridScrollEl, headerScrollEl];
+    if(this.dayGrid){
+      let dayGridScrollEl = this.dayGrid.el.parent(".fc-scroll-bars");
+      scrollersX.push(dayGridScrollEl);
+    }
+    let _syncScrollersX = new SyncScrollers("x", scrollersX);
+
+    let slatsLabelScrollEl = this.timeGrid.slatsLabelEl.find(".fc-scroll-bars");
+    let _syncScrollersY = new SyncScrollers("y", [timeGridScrollEl, slatsLabelScrollEl]);
   }
 
   /**

@@ -3,7 +3,6 @@
 import {htmlEscape} from "../../../FC.js";
 import TempParser from "../../../tools/TempParser.js";
 import Header from "./Header.html";
-import Intro from "./Intro.html";
 
 export default class HeaderParser extends TempParser{
 
@@ -16,7 +15,6 @@ export default class HeaderParser extends TempParser{
   constructor(rsGridContext) {
     super(rsGridContext);
     this.view = this.ds.view;
-    this.isRTL = this.ds.isRTL;
     this.daysMoment = this.ds.dayDates;
     this.resources = this.getResources();
     this.widgetHeaderClass = this.view.widgetHeaderClass;
@@ -34,10 +32,6 @@ export default class HeaderParser extends TempParser{
     return Header(this, {
       colspan: this.getColspan()
     });
-  }
-
-  getIntro() {
-    return Intro(this);
   }
 
   hasDayRow() {

@@ -19,8 +19,8 @@ export class App{
 				// 	}
 				// },
 	      contentHeight: 700,
-	      minTime: "06:00:00",
-	      maxTime: "20:00:00",
+	      // minTime: "06:00:00",
+	      // maxTime: "20:00:00",
 	      slotDuration: '00:30:00',
 	      allDaySlot: true,
 	      defaultView: 'resourceDay',

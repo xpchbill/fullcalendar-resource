@@ -3,7 +3,6 @@
 import {htmlEscape, isInt, divideDurationByDuration} from "../../../FC.js";
 import TempParser from "../../../tools/TempParser.js";
 import DayGrid from "./DayGrid.html";
-import BgIntro from "./BgIntro.html";
 
 export default class DayGridParser extends TempParser{
 
@@ -16,7 +15,6 @@ export default class DayGridParser extends TempParser{
   constructor(rsGridContext) {
     super(rsGridContext);
     this.view = this.ds.view;
-    this.isRTL = this.ds.isRTL;
     this.widgetContentClass = this.view.widgetContentClass;
     this.bgCellsIterator = this.getBgCells();
     this.limitColWidthAttr = this.ds.getLimitColWidthAttr();
@@ -29,17 +27,7 @@ export default class DayGridParser extends TempParser{
    * @return {String} HTML
    */
   parse() {
-    return DayGrid(this, {
-      bgintro: this.getBgIntro(),
-      axisStyle: this.view.axisStyleAttr()
-    });
-  }
-
-  getBgIntro() {
-    return BgIntro({
-      axisStyle: this.view.axisStyleAttr(),
-      widgetContentClass: this.widgetContentClass
-    });
+    return DayGrid(this);
   }
 
   getBgCells() {
