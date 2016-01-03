@@ -6,6 +6,7 @@ import TimeGridParser from "./temps/timegrid/TimeGridParser.js";
 import SlatsLabel from "./temps/timegrid/SlatsLabel.html";
 import EventSkeleton from "../common/temps/EventSkeleton.html";
 import ResourceGridMixin from "../common/ResourceGridMixin.js";
+import ObjectAssign from "object-assign";
 
 export default class ResourceTimeGrid extends TimeGrid {
 
@@ -206,7 +207,7 @@ export default class ResourceTimeGrid extends TimeGrid {
         let resources = this.getResources();
         resources.forEach((rs, i) => {
           if (!span.resourceId || span.resourceId === rs.id) {
-            let newSeg = Object.assign({}, sg);
+            let newSeg = ObjectAssign({}, sg);
             newSeg.col = this.getColByRsAndDayIndex(i, sg.dayIndex);
             rsSegs.push(newSeg);
           }
@@ -231,4 +232,5 @@ export default class ResourceTimeGrid extends TimeGrid {
   }
 
 }
-Object.assign(ResourceTimeGrid.prototype, ResourceGridMixin)
+
+ObjectAssign(ResourceTimeGrid.prototype, ResourceGridMixin)

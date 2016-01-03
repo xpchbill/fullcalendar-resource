@@ -4,6 +4,7 @@ import {DayGrid, htmlEscape} from "../FC.js";
 import DayGridParser from "./temps/daygrid/DayGridParser.js";
 import EventSkeleton from "../common/temps/EventSkeleton.html";
 import ResourceGridMixin from "../common/ResourceGridMixin.js";
+import ObjectAssign from "object-assign";
 
 export default class ResourceDayGrid extends DayGrid {
 
@@ -84,7 +85,7 @@ export default class ResourceDayGrid extends DayGrid {
         let resources = this.getResources();
         resources.forEach((rs, i) => {
           if (!span.resourceId || span.resourceId === rs.id) {
-            let newSeg = Object.assign({}, sg);
+            let newSeg = ObjectAssign({}, sg);
             newSeg.leftCol = this.getColByRsAndDayIndex(i, this.isRTL ? seg.lastRowDayIndex : sg.firstRowDayIndex);
             newSeg.rightCol = this.getColByRsAndDayIndex(i, this.isRTL ? seg.firstRowDayIndex : sg.lastRowDayIndex);
             rsSegs.push(newSeg);
@@ -110,4 +111,4 @@ export default class ResourceDayGrid extends DayGrid {
   }
 
 }
-Object.assign(ResourceDayGrid.prototype, ResourceGridMixin);
+ObjectAssign(ResourceDayGrid.prototype, ResourceGridMixin);

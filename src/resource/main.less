@@ -38,16 +38,24 @@
       overflow-x: hidden;
       overflow-y: scroll;
     }
+  }
+  .time-grid-has-scrollbar {
     .fc-scroll-hide::-webkit-scrollbar{
       width: 0px;
       height: 0px;
     }
-  }
-  .time-grid-has-scrollbar {
     .fc-header-container .fc-scroll,
     .fc-day-grid-container .fc-scroll {
       border-right: 1px solid #ddd;
       margin-right: 21px;
+      .fc-scroll-hide{
+        margin-bottom: -17px;
+      }
+      @media screen and (-webkit-min-device-pixel-ratio:0) {
+        .fc-scroll-hide{
+          margin-bottom: 0px;
+        }
+      }
     }
     .fc-slats-labels-container .fc-slats-labels {
       margin-bottom: 21px;

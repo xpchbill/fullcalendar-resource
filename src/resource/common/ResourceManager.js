@@ -1,6 +1,7 @@
 "use strict";
 
 import {Emitter} from "../FC.js";
+import ObjectAssign from "object-assign";
 
 export default class ResourceManager extends Emitter{
   constructor(calendar) {
@@ -53,7 +54,7 @@ export default class ResourceManager extends Emitter{
   setResources(resources) {
     //this._reset();
     resources.forEach((rsc) => {
-      var _rsc = this.createResource(Object.assign({}, rsc));
+      var _rsc = this.createResource(ObjectAssign({}, rsc));
       this.resources.push(_rsc);
     });
     return this.resources;
@@ -90,8 +91,8 @@ export default class ResourceManager extends Emitter{
 class FetchingStatus {
 
   constructor(){
-    this.defer = Promise.defer();
-    this.promise = this.defer.promise;
+    this.defer = $.Deferred();
+    this.promise = this.defer.promise();
     this.doing = false;
     this.done = false;
   }
