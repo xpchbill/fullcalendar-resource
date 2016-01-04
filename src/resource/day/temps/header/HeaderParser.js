@@ -21,6 +21,7 @@ export default class HeaderParser extends TempParser{
     this.rsEmptyArray = new Array(this.ds.getResourcesCount());
     this.limitColWidthAttr = this.ds.getLimitColWidthAttr();
     this.totalColIterator = new Array(this.ds.getTotalColCount());
+    this.rsHtmlIterator = this.getRsHtmlIterator();
   }
 
   /**
@@ -30,6 +31,7 @@ export default class HeaderParser extends TempParser{
    */
   parse() {
     return Header(this, {
+      resourceHtml: this.getResourceHtml(),
       colspan: this.getColspan()
     });
   }
@@ -40,6 +42,30 @@ export default class HeaderParser extends TempParser{
 
   hasResources() {
     return this.ds.getResourcesCount() > 0;
+  }
+
+  getRsHtmlIterator() {
+    let resources = this.ds.getResources();
+    let rsHtmlIterator = [];
+    resources.forEach((rs) => {
+      rsHtmlIterator.push({
+        resource: rs,
+        rsHtml: "<b>" + rs.title + "</b>"
+      });
+    });
+    return rsHtmlIterator;
+  }
+
+  getResourceHtml() {
+    let resourceHtml = "{{title}}";
+    let renderRsHeaderItem = this.view.opt("renderRsHeaderItem");
+    if($.isFunction(renderRsHeaderItem)){
+      let retrunHtml = renderRsHeaderItem();
+      if(retrunHtml){
+        resourceHtml = retrunHtml;
+      }
+    }
+    return resourceHtml;
   }
 
   getResources() {

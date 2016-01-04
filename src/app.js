@@ -8,8 +8,8 @@ export class App{
 
 	    $('#calendar').fullCalendar({
 	      header: {
-	        left: 'prev,next today',
-	        center: 'title',
+	        left: 'today prev,next title',
+	        center: '',
 	        right: 'resourceDay,resourceWeek,agendaWeek,month,agendaDay'
 	      },
 				// views: {
@@ -18,11 +18,20 @@ export class App{
 				// 		duration: { weeks: 2 }
 				// 	}
 				// },
-	      contentHeight: 700,
+				views: {
+					resourceDay: {
+						renderRsHeaderItem: function() {
+							return "<div style='margin:15px 0px;'>" +
+								"<span style='background:orange;padding:1px 4px;font-size:10px;color:#fff;border-radius:3px;'>E</span>" +
+								" {{title}}</div>";
+						}
+					}
+				},
+	      contentHeight: 600,
 	      // minTime: "06:00:00",
 	      // maxTime: "20:00:00",
 	      slotDuration: '00:30:00',
-	      allDaySlot: true,
+	      allDaySlot: false,
 	      defaultView: 'resourceDay',
 	      defaultDate: '2015-12-14',
 	      editable: true,
