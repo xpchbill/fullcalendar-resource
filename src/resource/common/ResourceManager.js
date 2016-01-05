@@ -2,11 +2,14 @@
 
 import {Emitter} from "../FC.js";
 import ObjectAssign from "object-assign";
+import Registor from "../tools/Registor.js";
 
 export default class ResourceManager extends Emitter{
+
   constructor(calendar) {
     super(calendar);
     this.calendar = calendar;
+    this.registor = new Registor("id", "rsId-");
     this._reset();
   }
 
@@ -15,7 +18,7 @@ export default class ResourceManager extends Emitter{
 
     fetchingStatus.start();
     setTimeout(() => {
-      this.setResources(this.calendar.options['resources'] || []);
+      this.setResources(this.calendar.options["resources"] || []);
       fetchingStatus.end(this.getResources());
     }, 500);
 
@@ -40,11 +43,11 @@ export default class ResourceManager extends Emitter{
   setCurrentResource(resourceId) {
     let resource = this.getResourceById(resourceId);
     this.currentResource = resource;
-    this.trigger('currentResourceChange', resource);
+    this.trigger("currentResourceChange", resource);
   }
 
   getResourceById(id) {
-    return this.resourcesMap[id];
+    return this.registor.getMember(id);
   }
 
   getResources() {
@@ -54,26 +57,26 @@ export default class ResourceManager extends Emitter{
   setResources(resources) {
     //this._reset();
     resources.forEach((rsc) => {
-      var _rsc = this.createResource(ObjectAssign({}, rsc));
-      this.resources.push(_rsc);
+      this.registor.register(rsc);
     });
-    return this.resources;
-  }
-
-  createResource(resource) {
-    resource.id = resource.id ? resource.id : '';
-    this.resourcesMap[resource.id] = resource;
-    return resource;
+    this.resources = this.registor.getMembers();
   }
 
   addResource(resource) {
-    var _rsc = this.createResource(resource);
-    this.resources.push(_rsc);
-    this.trigger('add', _rsc);
+    this.registor.register(resource);
+    this.resources = this.registor.getMembers();
+    this.trigger("add", resource);
   }
 
-  removeResource(resource) {
-    this.trigger('remove', _rsc);
+  deleteResource(resource, noTrigger) {
+    if(!resource.id || !this.registor.getMember(resource.id)){
+      return;
+    }
+    this.registor.unregister(resource);
+    this.resources = this.registor.getMembers();
+    if(!noTrigger){
+      this.trigger("delete", resource);
+    }
   }
 
   getEventResourceId(event) {
@@ -82,8 +85,8 @@ export default class ResourceManager extends Emitter{
 
   _reset() {
     this.resources = [];
-    this.resourcesMap = {};
     this.currentResource = null;
+    this.registor.destory();
     this.fetchingStatus = new FetchingStatus();
   }
 }

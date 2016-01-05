@@ -20,6 +20,19 @@ export default {
 
   getCurrentResource() {
     return this.rsManager.getCurrentResource();
+  },
+
+  addResource(resource) {
+    this.rsManager.addResource(resource);
+  },
+
+  removeResourceById(id) {
+    let resource = this.rsManager.getResourceById(id);
+    this.deleteResource(resource);
+  },
+
+  deleteResource(resource) {
+    this.rsManager.deleteResource(resource);
   }
 
 }

@@ -39,7 +39,7 @@ export default class ResourceView extends AgendaView{
       //super.displayView(date);
       dfd.resolve();
     }
-
+    this.addResourceListener();
     return dfd;
   }
 
@@ -53,6 +53,33 @@ export default class ResourceView extends AgendaView{
     fetchingStatus.promise.then(() => {
       super.displayEvents(events);
     });
+  }
+
+  addResourceListener() {
+    this.calendar.rsManager.on('add', this.addResourceSuccessful.bind(this));
+    this.calendar.rsManager.on('delete', this.deleteResourceSuccessful.bind(this));
+  }
+
+  addResourceSuccessful() {
+    this.redisplay();
+  }
+
+  deleteResourceSuccessful() {
+    this.redisplay();
+  }
+
+  redisplay() {
+    if (this.isSkeletonRendered) {
+			let wasEventsRendered = this.isEventsRendered;
+			this.clearEvents();
+			this.clearView();
+      this.renderResources();
+			super.displayView();
+			if (wasEventsRendered) {
+        let events = this.calendar.clientEvents();
+				this.displayEvents(events);
+			}
+		}
   }
 
   /**

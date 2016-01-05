@@ -217,6 +217,11 @@ export default class ResourceTimeGrid extends TimeGrid {
     }
   }
 
+  rerenderHeader() {
+    this.view.headContainerEl.html("");
+    this.view.renderHead();
+  }
+
   /**
    * Add resourse id to Span.
    * @override

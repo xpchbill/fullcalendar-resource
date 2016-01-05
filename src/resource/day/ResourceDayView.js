@@ -15,7 +15,6 @@ export default class ResourceDayView extends ResourceView {
    */
   constructor(...args) {
     super(...args);
-    //Skeleton
   }
 
   renderSkeletonHtml() {
@@ -122,7 +121,7 @@ export default class ResourceDayView extends ResourceView {
    * @override
    * @param  {Array} resources [description]
    */
-  renderResources(resources) {
+  renderResources() {
     this.timeGrid.renderResources();
     if (this.dayGrid) {
       this.dayGrid.renderResources();

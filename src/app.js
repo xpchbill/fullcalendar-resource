@@ -28,7 +28,7 @@ export class App{
 					}
 				},
 	      contentHeight: 600,
-	      // minTime: "06:00:00",
+	      minTime: "06:00:00",
 	      // maxTime: "20:00:00",
 	      slotDuration: '00:30:00',
 	      allDaySlot: false,
