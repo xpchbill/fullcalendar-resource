@@ -21,7 +21,6 @@ export default class HeaderParser extends TempParser{
     this.rsEmptyArray = new Array(this.ds.getAllowedResourcesCount());
     this.limitColWidthAttr = this.ds.getLimitColWidthAttr();
     this.totalColIterator = new Array(this.ds.getTotalColCount());
-    this.rsHtmlIterator = this.getRsHtmlIterator();
   }
 
   /**
@@ -42,18 +41,6 @@ export default class HeaderParser extends TempParser{
 
   hasResources() {
     return this.ds.getAllowedResourcesCount() > 0;
-  }
-
-  getRsHtmlIterator() {
-    let resources = this.ds.getAllowedResources();
-    let rsHtmlIterator = [];
-    resources.forEach((rs) => {
-      rsHtmlIterator.push({
-        resource: rs,
-        rsHtml: "<b>" + rs.title + "</b>"
-      });
-    });
-    return rsHtmlIterator;
   }
 
   getResourceHtml() {

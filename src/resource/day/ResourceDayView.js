@@ -23,7 +23,8 @@ export default class ResourceDayView extends ResourceView {
   }
 
   renderDates() {
-    this.el.addClass("fc-resource-view").html(this.renderSkeletonHtml());
+    super.renderDates();
+    this.el.addClass("fc-resource-day-view").html(this.renderSkeletonHtml());
     this.renderHead();
     this.setGridElement();
     this.timeGrid.renderDates();

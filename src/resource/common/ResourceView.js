@@ -56,6 +56,10 @@ export default class ResourceView extends AgendaView{
     });
   }
 
+  renderDates() {
+    this.el.addClass("fc-resource-view");
+  }
+
   addResourceListener() {
     this.calendar.rsManager.on('add', this.addResourceSuccessful.bind(this));
     this.calendar.rsManager.on('delete', this.deleteResourceSuccessful.bind(this));

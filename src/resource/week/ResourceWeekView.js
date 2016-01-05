@@ -1,6 +1,9 @@
 "use strict";
 
 import ResourceDayView from "../day/ResourceDayView.js";
+import ResourceTimeGrid from "./ResourceTimeGrid.js";
+import ResourceDayGrid from "./ResourceDayGrid.js";
+import SkeletonParser from "./temps/skeleton/SkeletonParser.js";
 
 export default class ResourceWeekView extends ResourceDayView {
 
@@ -9,13 +12,40 @@ export default class ResourceWeekView extends ResourceDayView {
    * @param  {*} ...args [calendar, type, options, intervalDuration]
    */
   constructor(...args) {
-      super(...args);
-    }
-    /**
-     * Render resources after fetching data from rsManager.
-     * @override
-     * @param  {Array} resources [description]
-     */
+    super(...args);
+  }
+
+  /**
+   * @override
+   * @return {Class} Instance of ResourceTimeGrid.
+   */
+  instantiateTimeGrid() {
+    return new ResourceTimeGrid(this);
+  }
+
+  /**
+   * @override
+   * @return {Class} Instance of ResourceDayGrid.
+   */
+  instantiateDayGrid() {
+    return new ResourceDayGrid(this);
+  }
+
+  renderDates() {
+    super.renderDates();
+    this.el.addClass("fc-resource-week-view");
+  }
+
+  renderSkeletonHtml() {
+    let skeletonParser = new SkeletonParser(this);
+    return skeletonParser.parse()
+  }
+
+  /**
+   * Render resources after fetching data from rsManager.
+   * @override
+   * @param  {Array} resources [description]
+   */
   renderResources(resources) {
     if (resources) {
       let index = this.opt("defaultResourcesIndex");

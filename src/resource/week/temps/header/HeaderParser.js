@@ -16,12 +16,11 @@ export default class HeaderParser extends TempParser{
     super(rsGridContext);
     this.view = this.ds.view;
     this.daysMoment = this.ds.dayDates;
-    this.resources = this.getAllowedResources();
+    this.resources = this.getResources();
     this.widgetHeaderClass = this.view.widgetHeaderClass;
     this.rsEmptyArray = new Array(this.ds.getAllowedResourcesCount());
-    this.limitColWidthAttr = this.ds.getLimitColWidthAttr();
+    this.limitColWidthAttr = this.getLimitColWidthAttr();
     this.totalColIterator = new Array(this.ds.getTotalColCount());
-    this.rsHtmlIterator = this.getRsHtmlIterator();
   }
 
   /**
@@ -31,8 +30,7 @@ export default class HeaderParser extends TempParser{
    */
   parse() {
     return Header(this, {
-      resourceHtml: this.getResourceHtml(),
-      colspan: this.getColspan()
+      resourceHtml: this.getResourceHtml()
     });
   }
 
@@ -42,18 +40,6 @@ export default class HeaderParser extends TempParser{
 
   hasResources() {
     return this.ds.getAllowedResourcesCount() > 0;
-  }
-
-  getRsHtmlIterator() {
-    let resources = this.ds.getAllowedResources();
-    let rsHtmlIterator = [];
-    resources.forEach((rs) => {
-      rsHtmlIterator.push({
-        resource: rs,
-        rsHtml: "<b>" + rs.title + "</b>"
-      });
-    });
-    return rsHtmlIterator;
   }
 
   getResourceHtml() {
@@ -68,8 +54,13 @@ export default class HeaderParser extends TempParser{
     return resourceHtml;
   }
 
-  getAllowedResources() {
-    let resources = this.ds.getAllowedResources();
+  getLimitColWidthAttr() {
+    let limitColWidth = this.view.opt("limitHeaderWidth");
+    return limitColWidth ? "width=" + limitColWidth : "";
+  }
+
+  getResources() {
+    let resources = this.view.calendar.getResources();
     if(this.isRTL){
       let revsResources = [];
       resources.reverse();
@@ -80,11 +71,6 @@ export default class HeaderParser extends TempParser{
       return revsResources;
     }
     return resources;
-  }
-
-  getColspan() {
-    let daysPerRow = this.ds.daysPerRow;
-    return daysPerRow > 1 ? "colspan='" + daysPerRow + "'" : "";
   }
 
   dateFormat() {
