@@ -45,6 +45,10 @@ export default {
 
   removeAllowedResource(resource) {
     return this.rsManager.addAllowedResource(resource);
+  },
+
+  isAllowedResource(resource) {
+    return this.rsManager.isAllowedResource(resource);
   }
 
 }

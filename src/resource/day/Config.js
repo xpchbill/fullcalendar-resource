@@ -1,6 +1,6 @@
 "use strict";
 
-import ResourceDayView from "./ResourceDayView.js"
+import ResourceDayView from "./ResourceDayView.js";
 
 /**
  * Configuration of resource day view.

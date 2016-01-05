@@ -44,5 +44,20 @@
     	{{>timeIntro}}
     {{/isRTL}}
     </tr>
+    <tr>
+    {{^isRTL}}
+    	{{>dayIntro}}
+    {{/isRTL}}
+      <td class="fc-scollbar-actor">
+        <div class="fc-row fc-scroll">
+          <div class="fc-scroll-bars">
+            <div class="fc-scollbar-actor-output"></div>
+          </div>
+        </div>
+      </td>
+    {{#isRTL}}
+    	{{>dayIntro}}
+    {{/isRTL}}
+    </tr>
   </tbody>
 </table>

@@ -15,8 +15,14 @@ export default class ResourceTimeGrid extends TimeGrid {
   }
 
   updateWidth() {
-    let rsTable = this.view.headContainerEl.find(".fc-scroll-bars table");
+    let headContainerEl = this.view.headContainerEl;
+    let rsTable = headContainerEl.find(".fc-scroll-bars table");
     rsTable.parent().width(rsTable.width());
+    this.view.el.find(".fc-scollbar-actor-output").width(rsTable.width());
+
+    let bgWidth = super.updateWidth();
+    headContainerEl.find(".fc-header-split-dates table").width(bgWidth);
+    return bgWidth;
   }
 
 }

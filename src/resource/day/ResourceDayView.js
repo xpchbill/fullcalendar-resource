@@ -1,5 +1,7 @@
 "use strict";
 
+import "./day.less";
+
 import {matchCellWidths} from "../FC.js";
 import ResourceView from "../common/ResourceView.js";
 import ResourceTimeGrid from "./ResourceTimeGrid.js";
@@ -31,7 +33,6 @@ export default class ResourceDayView extends ResourceView {
     if (this.dayGrid) {
       this.dayGrid.renderDates();
     }
-    this.syncScroll();
   }
 
   renderHead() {
@@ -69,6 +70,7 @@ export default class ResourceDayView extends ResourceView {
     let timeGridScrollEl = this.timeGrid.el.parent(".fc-scroll-bars");
     let timeGridHasScrollBar = SyncScrollers.hasScrollbar(timeGridScrollEl[0], "y");
     this.el[timeGridHasScrollBar ? "addClass" : "removeClass"]("time-grid-has-scrollbar");
+    this.syncScroll();
   }
 
   updateWidth() {
@@ -87,18 +89,22 @@ export default class ResourceDayView extends ResourceView {
   }
 
   syncScroll() {
-    let headerScrollEl= this.headContainerEl.parent(".fc-scroll-bars").css("padding-right", "21px"),
-        timeGridScrollEl = this.timeGrid.el.parent(".fc-scroll-bars");
+    let timeGridScrollEl = this.timeGrid.el.parent(".fc-scroll-bars");
 
-    let scrollersX = [timeGridScrollEl, headerScrollEl];
-    if(this.dayGrid){
-      let dayGridScrollEl = this.dayGrid.el.parent(".fc-scroll-bars");
-      scrollersX.push(dayGridScrollEl);
+    if(SyncScrollers.hasScrollbar(timeGridScrollEl[0], "x")){
+      let headerScrollEl = this.headContainerEl.parent(".fc-scroll-bars").css("padding-right", "21px");
+      let scrollersX = [timeGridScrollEl, headerScrollEl];
+      if(this.dayGrid){
+        let dayGridScrollEl = this.dayGrid.el.parent(".fc-scroll-bars");
+        scrollersX.push(dayGridScrollEl);
+      }
+      let _syncScrollersX = new SyncScrollers("x", scrollersX);
     }
-    let _syncScrollersX = new SyncScrollers("x", scrollersX);
 
-    let slatsLabelScrollEl = this.timeGrid.slatsLabelEl.find(".fc-scroll-bars");
-    let _syncScrollersY = new SyncScrollers("y", [timeGridScrollEl, slatsLabelScrollEl]);
+    if(SyncScrollers.hasScrollbar(timeGridScrollEl[0], "y")){
+      let slatsLabelScrollEl = this.timeGrid.slatsLabelEl.find(".fc-scroll-bars");
+      let _syncScrollersY = new SyncScrollers("y", [timeGridScrollEl, slatsLabelScrollEl]);
+    }
   }
 
   /**

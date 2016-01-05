@@ -18,7 +18,7 @@ export default class HeaderParser extends TempParser{
     this.daysMoment = this.ds.dayDates;
     this.resources = this.getAllowedResources();
     this.widgetHeaderClass = this.view.widgetHeaderClass;
-    this.rsEmptyArray = new Array(this.ds.getAllowedResourcesCount());
+    this.rsEmptyArray = new Array(this.ds.getAllowedResourcesColCount());
     this.limitColWidthAttr = this.ds.getLimitColWidthAttr();
     this.totalColIterator = new Array(this.ds.getTotalColCount());
   }
@@ -40,11 +40,11 @@ export default class HeaderParser extends TempParser{
   }
 
   hasResources() {
-    return this.ds.getAllowedResourcesCount() > 0;
+    return this.ds.getAllowedResourcesColCount() > 0;
   }
 
   getResourceHtml() {
-    let resourceHtml = "{{title}}";
+    let resourceHtml = "{{resource.title}}";
     let renderRsHeaderItem = this.view.opt("renderRsHeaderItem");
     if($.isFunction(renderRsHeaderItem)){
       let retrunHtml = renderRsHeaderItem();
@@ -56,17 +56,19 @@ export default class HeaderParser extends TempParser{
   }
 
   getAllowedResources() {
-    let resources = this.ds.getAllowedResources();
-    if(this.isRTL){
-      let revsResources = [];
-      resources.reverse();
-      resources.forEach((rsc) => {
-        revsResources.push(rsc);
+    let returnResources = [],
+        resources = this.view.calendar.getResources();
+    resources.forEach((rs) => {
+      returnResources.push({
+        resource: rs,
+        isAllowed: true
       });
-      resources.reverse();
-      return revsResources;
+    });
+
+    if(this.isRTL){
+      returnResources = returnResources.reverse();
     }
-    return resources;
+    return returnResources;
   }
 
   getColspan() {

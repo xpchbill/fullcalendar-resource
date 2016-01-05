@@ -31,6 +31,10 @@ export default {
     return resources.length;
   },
 
+  getAllowedResourcesColCount() {
+    return this.view.type === "resourceWeek" ? 1 : this.getAllowedResourcesCount();
+  },
+
   /**
    * Add resource id to the span(Moment).
    * @override Grid.events.js
@@ -107,8 +111,8 @@ export default {
    * @override DayTableMixin.computeColCnt
    * @return {Number}
    */
-  getResourcesColCount(){
-    let rsCount = this.getAllowedResourcesCount();
+  getRenderedColCount(){
+    let rsCount = this.getAllowedResourcesColCount();
     return (rsCount || 1) * this.daysPerRow;
   },
 
@@ -133,7 +137,7 @@ export default {
   },
 
   getTotalColCount() {
-    let resourceCount = this.getAllowedResourcesCount(),
+    let resourceCount = this.getAllowedResourcesColCount(),
         daysCount = this.dayDates.length;
     return resourceCount ? resourceCount * daysCount: daysCount;
   },

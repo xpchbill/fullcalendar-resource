@@ -94,7 +94,7 @@ export default class ResourceTimeGrid extends TimeGrid {
    * @return {Number}
    */
   computeColCnt() {
-    return this.getResourcesColCount();
+    return this.getRenderedColCount();
   }
 
   bookendCells(){}
@@ -194,7 +194,7 @@ export default class ResourceTimeGrid extends TimeGrid {
    * @return {Array} Segs
    */
   spanToSegs(span) {
-    let rsCount = this.getAllowedResourcesCount();
+    let rsCount = this.getAllowedResourcesColCount();
     let segs = this.sliceRangeByTimes(span);
 
     if (!rsCount) {
@@ -231,7 +231,7 @@ export default class ResourceTimeGrid extends TimeGrid {
    */
   getHitSpan(hit) {
     let span = super.getHitSpan(hit);
-    if (this.getAllowedResourcesCount()) {
+    if (this.getAllowedResourcesColCount()) {
       span.resourceId = this.getResourceByCol(hit.col).id;
     }
     return span;

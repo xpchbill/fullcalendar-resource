@@ -16,11 +16,10 @@ export default class HeaderParser extends TempParser{
     super(rsGridContext);
     this.view = this.ds.view;
     this.daysMoment = this.ds.dayDates;
-    this.resources = this.getResources();
+    this.rsIterator = this.getRsIterator();
     this.widgetHeaderClass = this.view.widgetHeaderClass;
-    this.rsEmptyArray = new Array(this.ds.getAllowedResourcesCount());
     this.limitColWidthAttr = this.getLimitColWidthAttr();
-    this.totalColIterator = new Array(this.ds.getTotalColCount());
+    this.totalColIterator = new Array(this.view.calendar.getResourcesCount());
   }
 
   /**
@@ -34,16 +33,12 @@ export default class HeaderParser extends TempParser{
     });
   }
 
-  hasDayRow() {
-    return this.ds.daysPerRow > 1 || !this.hasResources();
-  }
-
   hasResources() {
-    return this.ds.getAllowedResourcesCount() > 0;
+    return this.ds.getAllowedResourcesColCount() > 0;
   }
 
   getResourceHtml() {
-    let resourceHtml = "{{title}}";
+    let resourceHtml = "{{resource.title}}";
     let renderRsHeaderItem = this.view.opt("renderRsHeaderItem");
     if($.isFunction(renderRsHeaderItem)){
       let retrunHtml = renderRsHeaderItem();
@@ -59,18 +54,20 @@ export default class HeaderParser extends TempParser{
     return limitColWidth ? "width=" + limitColWidth : "";
   }
 
-  getResources() {
-    let resources = this.view.calendar.getResources();
-    if(this.isRTL){
-      let revsResources = [];
-      resources.reverse();
-      resources.forEach((rsc) => {
-        revsResources.push(rsc);
+  getRsIterator() {
+    let returnResources = [],
+        resources = this.view.calendar.getResources();
+    resources.forEach((rs) => {
+      returnResources.push({
+        resource: rs,
+        isAllowed: this.view.calendar.isAllowedResource(rs)
       });
-      resources.reverse();
-      return revsResources;
+    });
+
+    if(this.isRTL){
+      returnResources = returnResources.reverse();
     }
-    return resources;
+    return returnResources;
   }
 
   dateFormat() {

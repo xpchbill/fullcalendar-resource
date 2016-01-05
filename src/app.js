@@ -23,14 +23,14 @@ export class App{
 						renderRsHeaderItem: function() {
 							return "<div style='margin:15px 0px;'>" +
 								"<span style='background:orange;padding:1px 4px;font-size:10px;color:#fff;border-radius:3px;'>E</span>" +
-								" {{title}}</div>";
+								" {{resource.title}}</div>";
 						}
 					},
 					resourceWeek: {
 						renderRsHeaderItem: function() {
 							return "<div style='margin:15px 0px;'>" +
 								"<span style='background:orange;padding:1px 4px;font-size:10px;color:#fff;border-radius:3px;'>E</span>" +
-								" {{title}}</div>";
+								" {{resource.title}}</div>";
 						}
 					}
 				},

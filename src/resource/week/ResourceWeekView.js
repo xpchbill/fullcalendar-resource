@@ -1,9 +1,12 @@
 "use strict";
 
+import "./week.less";
+
 import ResourceDayView from "../day/ResourceDayView.js";
 import ResourceTimeGrid from "./ResourceTimeGrid.js";
 import ResourceDayGrid from "./ResourceDayGrid.js";
 import SkeletonParser from "./temps/skeleton/SkeletonParser.js";
+import SyncScrollers from "../tools/SyncScrollers.js";
 
 export default class ResourceWeekView extends ResourceDayView {
 
@@ -41,6 +44,16 @@ export default class ResourceWeekView extends ResourceDayView {
     return skeletonParser.parse()
   }
 
+  syncScroll() {
+    super.syncScroll();
+    let headerScrollEl = this.headContainerEl.find(".fc-scroll-bars");
+    if(SyncScrollers.hasScrollbar(headerScrollEl[0], "x")){
+      let actorScrollEl = this.el.find(".fc-scollbar-actor .fc-scroll-bars");
+      let _syncScrollersX = new SyncScrollers("x", [headerScrollEl, actorScrollEl]);
+    }
+  }
+
+
   /**
    * Render resources after fetching data from rsManager.
    * @override
@@ -55,5 +68,13 @@ export default class ResourceWeekView extends ResourceDayView {
     if (this.dayGrid) {
       this.dayGrid.renderResources();
     }
+  }
+
+  addResourceSuccessful(resource) {
+    this.redisplay(true);
+  }
+
+  deleteResourceSuccessful(resource) {
+    this.redisplay(true);
   }
 }

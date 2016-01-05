@@ -56,6 +56,16 @@ export default class ResourceManager extends Emitter{
     });
   }
 
+  isAllowedResource(resource) {
+    let alreadyHas = false;
+    this.allowedResources.forEach((aldRs) => {
+      if(resource.id === aldRs.id){
+        alreadyHas = true;
+      }
+    });
+    return alreadyHas;
+  }
+
   getResourceById(id) {
     return this.registor.getMember(id);
   }
