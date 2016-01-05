@@ -1,6 +1,5 @@
 "use strict";
 
-
 import {Emitter} from "../FC.js";
 
 export default class SyncScrollers {
@@ -11,14 +10,26 @@ export default class SyncScrollers {
   }
 
   static hasScrollbar(el, direction) {
-    if(direction === "y") {
-        return el.scrollHeight > el.clientHeight;
-    }else if(direction === "x") {
-        return el.scrollWidth > el.clientWidth;
-    }else{
+    if (direction === "y") {
+      return el.scrollHeight > el.clientHeight;
+    } else if (direction === "x") {
+      return el.scrollWidth > el.clientWidth;
+    } else {
       return el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight;
     }
- }
+  }
+
+  static getScrollPosition(el) {
+    return {
+      left: el.scrollLeft(),
+      top: el.scrollTop()
+    }
+  }
+
+  static scrollToPosition(el, position) {
+    el.scrollTop(position.top);
+    el.scrollLeft(position.left);
+  }
 
   init(elements) {
     this.scrollers = [];
@@ -31,7 +42,7 @@ export default class SyncScrollers {
 
   onScroll(scroller, scrollTop, scrollLeft) {
     this.scrollers.forEach((scr) => {
-      if(scr !== scroller){
+      if (scr !== scroller) {
         switch (this.type) {
           case 'x':
             scr.scrollLeft(scrollLeft);
@@ -60,7 +71,7 @@ class Scroller extends Emitter {
 
   onScroll(event) {
     let scrollTop = this.el.scrollTop(),
-        scrollLeft = this.el.scrollLeft();
+      scrollLeft = this.el.scrollLeft();
     this.trigger('scroll', this, scrollTop, scrollLeft);
   }
 

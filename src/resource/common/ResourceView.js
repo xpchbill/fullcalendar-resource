@@ -1,6 +1,7 @@
 "use strict";
 
 import {AgendaView} from "../FC.js";
+import SyncScrollers from "../tools/SyncScrollers.js";
 
 export default class ResourceView extends AgendaView{
 
@@ -61,25 +62,34 @@ export default class ResourceView extends AgendaView{
   }
 
   addResourceSuccessful() {
-    this.redisplay();
+    this.redisplay(true);
   }
 
   deleteResourceSuccessful() {
-    this.redisplay();
+    this.redisplay(true);
   }
 
-  redisplay() {
+  redisplay(remainScrollPosition) {
+    let position;
+    if(remainScrollPosition){
+      let scrollBar = this.timeGrid.el.parent(".fc-scroll-bars");
+      position = SyncScrollers.getScrollPosition(scrollBar);
+    }
     if (this.isSkeletonRendered) {
-			let wasEventsRendered = this.isEventsRendered;
-			this.clearEvents();
-			this.clearView();
+      let wasEventsRendered = this.isEventsRendered;
+      this.clearEvents();
+      this.clearView();
       this.renderResources();
-			super.displayView();
-			if (wasEventsRendered) {
+      super.displayView();
+      if (wasEventsRendered) {
         let events = this.calendar.clientEvents();
-				this.displayEvents(events);
-			}
-		}
+        this.displayEvents(events);
+      }
+    }
+    if(remainScrollPosition){
+      let scrollBar = this.timeGrid.el.parent(".fc-scroll-bars");
+      SyncScrollers.scrollToPosition(scrollBar, position);
+    }
   }
 
   /**

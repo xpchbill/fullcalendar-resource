@@ -31,7 +31,7 @@ export class App{
 	      minTime: "06:00:00",
 	      // maxTime: "20:00:00",
 	      slotDuration: '00:30:00',
-	      allDaySlot: false,
+	      allDaySlot: true,
 	      defaultView: 'resourceDay',
 	      defaultDate: '2015-12-14',
 	      editable: true,
