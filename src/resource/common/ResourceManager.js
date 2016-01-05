@@ -29,21 +29,31 @@ export default class ResourceManager extends Emitter{
     this.fetch();
   }
 
-  getCurrentResource() {
-    let currentResource,
-        resources = this.getResources();
-    if(this.calendar.view.type != "resourceDay"){
-      currentResource = this.currentResource ? this.currentResource : resources[0];
-    }else{
-      currentResource = null;
-    }
-    return currentResource;
+  setAllowedResources(resources) {
+    this.allowedResources = resources;
   }
 
-  setCurrentResource(resourceId) {
-    let resource = this.getResourceById(resourceId);
-    this.currentResource = resource;
-    this.trigger("currentResourceChange", resource);
+  getAllowedResources() {
+    return this.allowedResources;
+  }
+
+  addAllowedResource(resource) {
+    let alreadyHas = false;
+    this.allowedResources = this.allowedResources.map((aldRs) => {
+      if(resource.id === aldRs.id){
+        alreadyHas = true;
+      }
+      return resource.id !== aldRs.id ? aldRs : resource;
+    });
+    if(!alreadyHas){
+      this.allowedResources.push(resource);
+    }
+  }
+
+  removeAllowedResource(resource) {
+    return this.allowedResources.filter((aldRs) => {
+      return aldRs.id !== resource.id;
+    });
   }
 
   getResourceById(id) {
@@ -85,6 +95,7 @@ export default class ResourceManager extends Emitter{
 
   _reset() {
     this.resources = [];
+    this.allowedResources = [];
     this.currentResource = null;
     this.registor.destory();
     this.fetchingStatus = new FetchingStatus();

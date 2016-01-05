@@ -16,9 +16,9 @@ export default class HeaderParser extends TempParser{
     super(rsGridContext);
     this.view = this.ds.view;
     this.daysMoment = this.ds.dayDates;
-    this.resources = this.getResources();
+    this.resources = this.getAllowedResources();
     this.widgetHeaderClass = this.view.widgetHeaderClass;
-    this.rsEmptyArray = new Array(this.ds.getResourcesCount());
+    this.rsEmptyArray = new Array(this.ds.getAllowedResourcesCount());
     this.limitColWidthAttr = this.ds.getLimitColWidthAttr();
     this.totalColIterator = new Array(this.ds.getTotalColCount());
     this.rsHtmlIterator = this.getRsHtmlIterator();
@@ -41,11 +41,11 @@ export default class HeaderParser extends TempParser{
   }
 
   hasResources() {
-    return this.ds.getResourcesCount() > 0;
+    return this.ds.getAllowedResourcesCount() > 0;
   }
 
   getRsHtmlIterator() {
-    let resources = this.ds.getResources();
+    let resources = this.ds.getAllowedResources();
     let rsHtmlIterator = [];
     resources.forEach((rs) => {
       rsHtmlIterator.push({
@@ -68,8 +68,8 @@ export default class HeaderParser extends TempParser{
     return resourceHtml;
   }
 
-  getResources() {
-    let resources = this.ds.getResources();
+  getAllowedResources() {
+    let resources = this.ds.getAllowedResources();
     if(this.isRTL){
       let revsResources = [];
       resources.reverse();

@@ -18,21 +18,33 @@ export default {
     return resources.length;
   },
 
-  getCurrentResource() {
-    return this.rsManager.getCurrentResource();
-  },
-
   addResource(resource) {
-    this.rsManager.addResource(resource);
+    return this.rsManager.addResource(resource);
   },
 
   removeResourceById(id) {
     let resource = this.rsManager.getResourceById(id);
-    this.deleteResource(resource);
+    return this.deleteResource(resource);
   },
 
   deleteResource(resource) {
-    this.rsManager.deleteResource(resource);
+    return this.rsManager.deleteResource(resource);
+  },
+
+  setAllowedResources(resources) {
+    return this.rsManager.setAllowedResources(resources);
+  },
+
+  getAllowedResources() {
+    return this.rsManager.getAllowedResources();
+  },
+
+  addAllowedResource(resource) {
+    return this.rsManager.addAllowedResource(resource);
+  },
+
+  removeAllowedResource(resource) {
+    return this.rsManager.addAllowedResource(resource);
   }
 
 }

@@ -9,7 +9,9 @@ export default {
 	type: 'agenda',
 	'class': ResourceWeekView,
 	"defaults": {
+		"defaultResourcesIndex": 0,
+    "fixedAxisWidth": 50,
 		"buttonText": "rsweek"
 	},
-	duration: { day: 1 }
+	duration: { week: 1 }
 }

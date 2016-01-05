@@ -3,7 +3,6 @@
 import {htmlEscape} from "../../../FC.js";
 import TempParser from "../../../tools/TempParser.js";
 import Header from "./Header.html";
-import Intro from "./Intro.html";
 
 export default class HeaderParser extends TempParser{
 
@@ -16,11 +15,13 @@ export default class HeaderParser extends TempParser{
   constructor(rsGridContext) {
     super(rsGridContext);
     this.view = this.ds.view;
-    this.isRTL = this.ds.isRTL;
     this.daysMoment = this.ds.dayDates;
-    this.resources = this.getResources();
+    this.resources = this.getAllowedResources();
     this.widgetHeaderClass = this.view.widgetHeaderClass;
-    this.rsEmptyArray = new Array(this.ds.getResourcesCount());
+    this.rsEmptyArray = new Array(this.ds.getAllowedResourcesCount());
+    this.limitColWidthAttr = this.ds.getLimitColWidthAttr();
+    this.totalColIterator = new Array(this.ds.getTotalColCount());
+    this.rsHtmlIterator = this.getRsHtmlIterator();
   }
 
   /**
@@ -30,13 +31,9 @@ export default class HeaderParser extends TempParser{
    */
   parse() {
     return Header(this, {
-      intro: this.getIntro(),
+      resourceHtml: this.getResourceHtml(),
       colspan: this.getColspan()
     });
-  }
-
-  getIntro() {
-    return Intro(this);
   }
 
   hasDayRow() {
@@ -44,11 +41,35 @@ export default class HeaderParser extends TempParser{
   }
 
   hasResources() {
-    return this.ds.getResourcesCount() > 0;
+    return this.ds.getAllowedResourcesCount() > 0;
   }
 
-  getResources() {
-    let resources = this.ds.getResources();
+  getRsHtmlIterator() {
+    let resources = this.ds.getAllowedResources();
+    let rsHtmlIterator = [];
+    resources.forEach((rs) => {
+      rsHtmlIterator.push({
+        resource: rs,
+        rsHtml: "<b>" + rs.title + "</b>"
+      });
+    });
+    return rsHtmlIterator;
+  }
+
+  getResourceHtml() {
+    let resourceHtml = "{{title}}";
+    let renderRsHeaderItem = this.view.opt("renderRsHeaderItem");
+    if($.isFunction(renderRsHeaderItem)){
+      let retrunHtml = renderRsHeaderItem();
+      if(retrunHtml){
+        resourceHtml = retrunHtml;
+      }
+    }
+    return resourceHtml;
+  }
+
+  getAllowedResources() {
+    let resources = this.ds.getAllowedResources();
     if(this.isRTL){
       let revsResources = [];
       resources.reverse();

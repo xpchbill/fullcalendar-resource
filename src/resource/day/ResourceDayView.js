@@ -72,9 +72,9 @@ export default class ResourceDayView extends ResourceView {
 
   updateWidth() {
     super.updateWidth();
-    this.timeGrid.updateWidth();
+    let width = this.timeGrid.updateWidth();
     if (this.dayGrid) {
-      this.dayGrid.updateWidth();
+      this.dayGrid.updateWidth(width);
     }
   }
 
@@ -121,11 +121,24 @@ export default class ResourceDayView extends ResourceView {
    * @override
    * @param  {Array} resources [description]
    */
-  renderResources() {
+  renderResources(resources) {
+    if(resources){
+      this.calendar.setAllowedResources(resources);
+    }
     this.timeGrid.renderResources();
     if (this.dayGrid) {
       this.dayGrid.renderResources();
     }
+  }
+
+  addResourceSuccessful(resource) {
+    this.calendar.addAllowedResource(resource);
+    super.addResourceSuccessful();
+  }
+
+  deleteResourceSuccessful(resource) {
+    this.calendar.removeAllowedResource(resource);
+    super.deleteResourceSuccessful();
   }
 
 }

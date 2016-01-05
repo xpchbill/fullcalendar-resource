@@ -28,9 +28,9 @@ export default class ResourceDayGrid extends DayGrid {
     return this.getResourcesColCount();
   }
 
-  updateWidth() {
-    let bgWidth = this.el.find(".fc-bg > table").outerWidth();
-    this.el.width(bgWidth);
+  updateWidth(width) {
+    //let bgWidth = this.el.find(".fc-bg > table").outerWidth();
+    this.el.width(width);
   }
 
   bookendCells(){}
@@ -70,7 +70,7 @@ export default class ResourceDayGrid extends DayGrid {
    * @return {Array} Segs
    */
   spanToSegs(span) {
-    let rsCount = this.getResourcesCount();
+    let rsCount = this.getAllowedResourcesCount();
     let segs = this.sliceRangeByRow(span);
 
     if (!rsCount) {
@@ -82,7 +82,7 @@ export default class ResourceDayGrid extends DayGrid {
     } else {
       let rsSegs = [];
       segs.forEach((sg) => {
-        let resources = this.getResources();
+        let resources = this.getAllowedResources();
         resources.forEach((rs, i) => {
           if (!span.resourceId || span.resourceId === rs.id) {
             let newSeg = ObjectAssign({}, sg);
@@ -104,7 +104,7 @@ export default class ResourceDayGrid extends DayGrid {
    */
   getHitSpan(hit) {
     let span = super.getHitSpan(hit);
-    if (this.getResourcesCount()) {
+    if (this.getAllowedResourcesCount()) {
       span.resourceId = this.getResourceByCol(hit.col).id;
     }
     return span;

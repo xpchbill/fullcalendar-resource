@@ -1,11 +1,10 @@
 "use strict";
 
-import {htmlEscape, isInt, divideDurationByDuration} from "../../../FC.js";
+import {htmlEscape} from "../../../FC.js";
 import TempParser from "../../../tools/TempParser.js";
 import TimeGrid from "./TimeGrid.html";
-import BgIntro from "./BgIntro.html";
 
-export default class TimeGridParser extends TempParser{
+export default class TimeGridParser extends TempParser {
 
   /**
    * Us this.ds to organize parse data.
@@ -16,10 +15,11 @@ export default class TimeGridParser extends TempParser{
   constructor(rsGridContext) {
     super(rsGridContext);
     this.view = this.ds.view;
-    this.isRTL = this.ds.isRTL;
     this.widgetContentClass = this.view.widgetContentClass;
     this.bgCellsIterator = this.getBgCells();
-    this.slatCellsIterator = this.getSlatCells();
+    this.slatCellsIterator = this.ds.getSlatCells();
+    this.limitColWidthAttr = this.ds.getLimitColWidthAttr();
+    this.totalColIterator = new Array(this.ds.getTotalColCount());
   }
 
   /**
@@ -28,24 +28,14 @@ export default class TimeGridParser extends TempParser{
    * @return {String} HTML
    */
   parse() {
-    return TimeGrid(this, {
-      bgintro: this.getBgIntro(),
-      axisStyle: this.view.axisStyleAttr()
-    });
-  }
-
-  getBgIntro() {
-    return BgIntro({
-      axisStyle: this.view.axisStyleAttr(),
-      widgetContentClass: this.widgetContentClass
-    });
+    return TimeGrid(this);
   }
 
   getBgCells() {
     let colCnt = this.ds.colCnt,
-        bgCells = [];
+      bgCells = [];
 
-    for(let col = 0; col < colCnt; col++){
+    for (let col = 0; col < colCnt; col++) {
       let date = this.ds.getCellDate(0, col);
       let classes = this.ds.getDayClasses(date);
       classes.unshift("fc-day", this.view.widgetContentClass);
@@ -55,25 +45,6 @@ export default class TimeGridParser extends TempParser{
       });
     }
     return bgCells;
-  }
-
-  getSlatCells() {
-    let maxTime = this.ds.maxTime;
-    let minTime = this.ds.minTime;
-    let slotTime = moment.duration(+minTime);
-    let slatCells = [];
-
-    while (slotTime < maxTime) {
-      let slotDate = this.ds.start.clone().time(slotTime);
-      let isLabeled = isInt(divideDurationByDuration(slotTime, this.ds.labelInterval));
-      slatCells.push({
-        date: slotDate,
-        isLabeled: isLabeled,
-        labelFormat: this.ds.labelFormat
-      });
-      slotTime.add(this.ds.slotDuration);
-    }
-    return slatCells;
   }
 
   getSlatDateFormate() {

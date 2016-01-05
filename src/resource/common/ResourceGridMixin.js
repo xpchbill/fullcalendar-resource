@@ -17,17 +17,17 @@ export default {
    * Get resources.
    * @return {Array} resources
    */
-  getResources() {
+  getAllowedResources() {
     let calendar = this.view.calendar;
-    return calendar.getResources();
+    return calendar.getAllowedResources();
   },
 
   /**
    * Get resources count.
    * @return {Number}
    */
-  getResourcesCount() {
-    let resources = this.getResources();
+  getAllowedResourcesCount() {
+    let resources = this.getAllowedResources();
     return resources.length;
   },
 
@@ -48,7 +48,7 @@ export default {
    * @return {Object} resource
    */
   getResourceByCol(col) {
-    let resources = this.getResources();
+    let resources = this.getAllowedResources();
     return resources[this.getResourceIndexByCol(col)];
   },
 
@@ -108,7 +108,7 @@ export default {
    * @return {Number}
    */
   getResourcesColCount(){
-    let rsCount = this.getResourcesCount();
+    let rsCount = this.getAllowedResourcesCount();
     return (rsCount || 1) * this.daysPerRow;
   },
 
@@ -133,7 +133,7 @@ export default {
   },
 
   getTotalColCount() {
-    let resourceCount = this.getResourcesCount(),
+    let resourceCount = this.getAllowedResourcesCount(),
         daysCount = this.dayDates.length;
     return resourceCount ? resourceCount * daysCount: daysCount;
   },

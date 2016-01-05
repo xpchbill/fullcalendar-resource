@@ -27,8 +27,8 @@ export default class ResourceView extends AgendaView{
 
     let fetchingStatus = this.rsManager.fetchingStatus;
     if (!fetchingStatus.done && !fetchingStatus.doing) {
-      fetchingStatus.promise.then(() => {
-        this.renderResources();
+      fetchingStatus.promise.then((resources) => {
+        this.renderResources(resources);
         this.redisplay();
         dfd.resolve();
       });
@@ -36,8 +36,8 @@ export default class ResourceView extends AgendaView{
     }
 
     if (fetchingStatus.done) {
-      this.renderResources();
-      //super.displayView(date);
+      this.renderResources(this.calendar.getResources());
+      super.displayView(date);
       dfd.resolve();
     }
     this.addResourceListener();
@@ -61,11 +61,11 @@ export default class ResourceView extends AgendaView{
     this.calendar.rsManager.on('delete', this.deleteResourceSuccessful.bind(this));
   }
 
-  addResourceSuccessful() {
+  addResourceSuccessful(resource) {
     this.redisplay(true);
   }
 
-  deleteResourceSuccessful() {
+  deleteResourceSuccessful(resource) {
     this.redisplay(true);
   }
 
