@@ -27,6 +27,10 @@ export default {
     return this.deleteResource(resource);
   },
 
+  getResourceById(id) {
+    return this.rsManager.getResourceById(id);
+  },
+
   deleteResource(resource) {
     return this.rsManager.deleteResource(resource);
   },
@@ -45,6 +49,14 @@ export default {
 
   removeAllowedResource(resource) {
     return this.rsManager.addAllowedResource(resource);
+  },
+
+  toggleAllowResourceByid(id) {
+    return this.rsManager.toggleAllowResourceByid(id);
+  },
+
+  getAllowedResourceById(id) {
+    return this.rsManager.getAllowedResourceById(id);
   },
 
   isAllowedResource(resource) {

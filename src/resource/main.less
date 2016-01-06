@@ -7,7 +7,8 @@
       position: relative;
       overflow: hidden;
     }
-    .fc-slats-labels td {
+    .fc-slats-labels td,
+    .fc-time-grid .fc-slats td {
       height: 2.0em;
       border-bottom: 0;
     }
@@ -45,6 +46,11 @@
     }
   }
   .time-grid-has-scrollbar {
+    .fc-header-container,
+    .fc-day-grid-container,
+    .fc-time-grid-container {
+      overflow: hidden;
+    }
     .fc-scroll-hide::-webkit-scrollbar{
       width: 0px;
       height: 0px;

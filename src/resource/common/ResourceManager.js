@@ -51,9 +51,29 @@ export default class ResourceManager extends Emitter{
   }
 
   removeAllowedResource(resource) {
-    return this.allowedResources.filter((aldRs) => {
+    return this.allowedResources = this.allowedResources.filter((aldRs) => {
       return aldRs.id !== resource.id;
     });
+  }
+
+  toggleAllowResourceByid(id) {
+    let resource = this.getAllowedResourceById(id);
+    if(resource){
+      this.removeAllowedResource(resource);
+    }else{
+      resource = this.getResourceById(id);
+      this.addAllowedResource(resource);
+    }
+  }
+
+  getAllowedResourceById(id) {
+    let reource = null;
+    this.allowedResources.forEach((aldRs) => {
+      if(id === aldRs.id){
+        reource = aldRs;
+      }
+    });
+    return reource;
   }
 
   isAllowedResource(resource) {

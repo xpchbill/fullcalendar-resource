@@ -20,7 +20,9 @@ export default class ResourceTimeGrid extends TimeGrid {
     rsTable.parent().width(rsTable.width());
     this.view.el.find(".fc-scollbar-actor-output").width(rsTable.width());
 
-    let bgWidth = super.updateWidth();
+    let bgWidth = this.el.parent(".fc-scroll-bars").width() - 21;
+    this.el.width(bgWidth);
+    this.view.headContainerEl.width(bgWidth);
     headContainerEl.find(".fc-header-split-dates table").width(bgWidth);
     return bgWidth;
   }

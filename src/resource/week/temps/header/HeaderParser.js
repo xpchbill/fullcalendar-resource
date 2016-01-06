@@ -28,9 +28,7 @@ export default class HeaderParser extends TempParser{
    * @return {String} HTML
    */
   parse() {
-    return Header(this, {
-      resourceHtml: this.getResourceHtml()
-    });
+    return Header(this);
   }
 
   hasResources() {
@@ -38,13 +36,10 @@ export default class HeaderParser extends TempParser{
   }
 
   getResourceHtml() {
-    let resourceHtml = "{{resource.title}}";
-    let renderRsHeaderItem = this.view.opt("renderRsHeaderItem");
-    if($.isFunction(renderRsHeaderItem)){
-      let retrunHtml = renderRsHeaderItem();
-      if(retrunHtml){
-        resourceHtml = retrunHtml;
-      }
+    let resourceHtml = this.resource.title;
+    if($.isFunction(this.render)){
+      let retrunHtml = this.render(this.resource, this.isAllowed);
+      resourceHtml = retrunHtml ? retrunHtml : resourceHtml;
     }
     return resourceHtml;
   }
@@ -60,6 +55,7 @@ export default class HeaderParser extends TempParser{
     resources.forEach((rs) => {
       returnResources.push({
         resource: rs,
+        render: this.view.opt("renderRsHeaderItem"),
         isAllowed: this.view.calendar.isAllowedResource(rs)
       });
     });

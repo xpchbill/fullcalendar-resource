@@ -73,7 +73,7 @@ export default class ResourceDayGrid extends DayGrid {
     let rsCount = this.getAllowedResourcesColCount();
     let segs = this.sliceRangeByRow(span);
 
-    if (!rsCount) {
+    if (!rsCount || this.view.type !== "resourceDay") {
       segs.forEach((sg) => {
         sg.leftCol = this.isRTL ? seg.lastRowDayIndex : sg.firstRowDayIndex;
         sg.rightCol = this.isRTL ? seg.firstRowDayIndex : sg.lastRowDayIndex;

@@ -94,6 +94,7 @@ export default class ResourceView extends AgendaView{
       let scrollBar = this.timeGrid.el.parent(".fc-scroll-bars");
       SyncScrollers.scrollToPosition(scrollBar, position);
     }
+    return position;
   }
 
   /**

@@ -20,21 +20,23 @@ export class App{
 				// },
 				views: {
 					resourceDay: {
-						renderRsHeaderItem: function() {
+						renderRsHeaderItem: function(resource, isAllowed) {
 							return "<div style='margin:15px 0px;'>" +
-								"<span style='background:orange;padding:1px 4px;font-size:10px;color:#fff;border-radius:3px;'>E</span>" +
-								" {{resource.title}}</div>";
+								"<span style='background:orange;padding:1px 4px;font-size:10px;color:#fff;border-radius:3px;'>E</span> " +
+								resource.title +
+								"</div>";
 						}
 					},
 					resourceWeek: {
-						renderRsHeaderItem: function() {
+						renderRsHeaderItem: function(resource, isAllowed) {
 							return "<div style='margin:15px 0px;'>" +
-								"<span style='background:orange;padding:1px 4px;font-size:10px;color:#fff;border-radius:3px;'>E</span>" +
-								" {{resource.title}}</div>";
+								"<span style='background:orange;padding:1px 4px;font-size:10px;color:#fff;border-radius:3px;'>E</span> " +
+								resource.title +
+								"</div>";
 						}
 					}
 				},
-	      contentHeight: 600,
+	      contentHeight: 550,
 	      minTime: "06:00:00",
 	      // maxTime: "20:00:00",
 	      slotDuration: '00:30:00',

@@ -37,6 +37,7 @@ export default class ResourceWeekView extends ResourceDayView {
   renderDates() {
     super.renderDates();
     this.el.addClass("fc-resource-week-view");
+    this.addHeaderEvent();
   }
 
   renderSkeletonHtml() {
@@ -53,6 +54,31 @@ export default class ResourceWeekView extends ResourceDayView {
     }
   }
 
+  addHeaderEvent() {
+    let headerGrid = this.timeGrid.headerGrid,
+        rsCells = headerGrid.find(".fc-rs-cell");
+    rsCells.on("click", this.onAllowResource.bind(this));
+  }
+
+  onAllowResource(evt) {
+    let rsCellEl = $(evt.currentTarget),
+        rsId = rsCellEl.attr("rs-cell-id");
+    this.calendar.toggleAllowResourceByid(rsId);
+    this.redisplay(true);
+  }
+
+  redisplay(remainScrollPosition) {
+    let position;
+    if(remainScrollPosition){
+      let scrollBar = this.el.find(".fc-scollbar-actor .fc-scroll-bars");
+      position = SyncScrollers.getScrollPosition(scrollBar);
+    }
+    super.redisplay(remainScrollPosition);
+    if(remainScrollPosition){
+      let scrollBar = this.el.find(".fc-scollbar-actor .fc-scroll-bars");
+      SyncScrollers.scrollToPosition(scrollBar, position);
+    }
+  }
 
   /**
    * Render resources after fetching data from rsManager.

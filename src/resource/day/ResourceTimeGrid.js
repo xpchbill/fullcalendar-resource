@@ -175,12 +175,12 @@ export default class ResourceTimeGrid extends TimeGrid {
    * @return {Array} Segs
    */
   renderFgEvents(events) {
-    var calendar, event;
-    calendar = this.view.calendar;
+    let calendar = this.view.calendar;
 
     let rsEvents = [];
     events.forEach((evt) => {
-      if (evt['resourceId']) {
+      let rsId = evt['resourceId'];
+      if (rsId && calendar.getAllowedResourceById(rsId)) {
         rsEvents.push(evt);
       }
     });
@@ -197,7 +197,7 @@ export default class ResourceTimeGrid extends TimeGrid {
     let rsCount = this.getAllowedResourcesColCount();
     let segs = this.sliceRangeByTimes(span);
 
-    if (!rsCount) {
+    if (!rsCount || this.view.type !== "resourceDay") {
       segs.forEach((sg) => {
         sg.col = sg.dayIndex;
       });
