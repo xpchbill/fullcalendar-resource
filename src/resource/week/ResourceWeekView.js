@@ -63,7 +63,7 @@ export default class ResourceWeekView extends ResourceDayView {
   onAllowResource(evt) {
     let rsCellEl = $(evt.currentTarget),
         rsId = rsCellEl.attr("rs-cell-id");
-    this.calendar.toggleAllowResourceByid(rsId);
+    this.calendar.toggleAllowResourceById(rsId);
     this.redisplay(true);
   }
 

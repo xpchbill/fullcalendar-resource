@@ -56,7 +56,7 @@ export default class ResourceManager extends Emitter{
     });
   }
 
-  toggleAllowResourceByid(id) {
+  toggleAllowResourceById(id) {
     let resource = this.getAllowedResourceById(id);
     if(resource){
       this.removeAllowedResource(resource);

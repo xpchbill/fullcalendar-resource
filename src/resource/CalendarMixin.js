@@ -51,8 +51,8 @@ export default {
     return this.rsManager.addAllowedResource(resource);
   },
 
-  toggleAllowResourceByid(id) {
-    return this.rsManager.toggleAllowResourceByid(id);
+  toggleAllowResourceById(id) {
+    return this.rsManager.toggleAllowResourceById(id);
   },
 
   getAllowedResourceById(id) {

@@ -143,10 +143,9 @@ export class App{
 	        title: 'event 4'
 	      }, {
 	        id: '5',
-	        resourceId: 'c',
+	        resourceId: 's',
 	        start: '2015-12-14T08:00:00',
 	        end: '2015-12-14T09:30:00',
-					rendering: 'background',
 	        title: 'event 5'
 	      }, {
 	        id: '6',
@@ -156,11 +155,10 @@ export class App{
 	        title: 'event 6'
 	      }, {
 	        id: '7',
-	        resourceId: 'c',
+	        resourceId: 'f',
 	        start: '2015-12-14T09:00:00',
 	        end: '2015-12-14T11:00:00',
 	        title: 'event 7',
-					rendering: 'background',
 	        color: '#257e4a'
 	      }, {
 	        id: '8',
