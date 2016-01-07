@@ -66,6 +66,24 @@ export default class ResourceDayGrid extends DayGrid {
 
   /**
    * @override
+   * @return {Array} Segs
+   */
+  renderFgEvents(events) {
+    let calendar = this.view.calendar;
+
+    let rsEvents = [];
+    events.forEach((evt) => {
+      let rsId = evt['resourceId'];
+      if (rsId && calendar.getAllowedResourceById(rsId)) {
+        rsEvents.push(evt);
+      }
+    });
+
+    return super.renderFgEvents(rsEvents);
+  }
+
+  /**
+   * @override
    * @param  {Object} Span
    * @return {Array} Segs
    */
