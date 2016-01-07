@@ -135,9 +135,9 @@ export default class ResourceTimeGrid extends TimeGrid {
       segs = this.renderFillSegEls(type, segs);
       let segCols = this.groupSegCols(segs);
 
-      let className = className || type.toLowerCase();
+      let _className = className || type.toLowerCase();
       let skeletonEl = $(EventSkeleton({
-        className: className,
+        className: _className,
         limitColWidthAttr: this.getLimitColWidthAttr(),
         totalColIterator: new Array(this.getTotalColCount())
       }));
@@ -149,7 +149,7 @@ export default class ResourceTimeGrid extends TimeGrid {
         let tdEl = $('<td/>').appendTo(trEl);
 
         if (colSegs.length) {
-          let containerEl = $('<div class="fc-' + className + '-container"/>').appendTo(tdEl);
+          let containerEl = $('<div class="fc-' + _className + '-container"/>').appendTo(tdEl);
           let dayDate = this.getCellDate(0, col); // row=0
 
           for (let i = 0; i < colSegs.length; i++) {
