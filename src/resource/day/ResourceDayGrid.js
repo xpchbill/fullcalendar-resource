@@ -1,12 +1,13 @@
 "use strict";
 
 import {DayGrid, htmlEscape} from "../FC.js";
+import {BaseResourceGridMixin} from "../common/grid/BaseResourceGrid.js";
+import BaseResourceDayGrid from "../common/grid/BaseResourceDayGrid.js";
 import DayGridParser from "./temps/daygrid/DayGridParser.js";
 import EventSkeleton from "../common/temps/EventSkeleton.html";
-import {BaseResourceGridMixin} from "../common/grid/BaseResourceGrid.js";
 import ObjectAssign from "object-assign";
 
-export default class ResourceDayGrid extends DayGrid {
+export default class ResourceDayGrid extends BaseResourceDayGrid {
 
   /**
    * @override
@@ -19,21 +20,10 @@ export default class ResourceDayGrid extends DayGrid {
     return parser.parse();
   }
 
-  /**
-   * Compute actual rendered grid column count.
-   * @override DayTableMixin.computeColCnt
-   * @return {Number}
-   */
-  computeColCnt() {
-    return this.getRenderedColCount();
-  }
-
   updateWidth(width) {
     //let bgWidth = this.el.find(".fc-bg > table").outerWidth();
     this.el.width(width);
   }
-
-  bookendCells(){}
 
   renderFillRow(type, seg, className) {
     let colCnt = this.colCnt;
@@ -66,24 +56,6 @@ export default class ResourceDayGrid extends DayGrid {
 
   /**
    * @override
-   * @return {Array} Segs
-   */
-  renderFgEvents(events) {
-    let calendar = this.view.calendar;
-
-    let rsEvents = [];
-    events.forEach((evt) => {
-      let rsId = evt['resourceId'];
-      if (rsId && calendar.getAllowedResourceById(rsId)) {
-        rsEvents.push(evt);
-      }
-    });
-
-    return super.renderFgEvents(rsEvents);
-  }
-
-  /**
-   * @override
    * @param  {Object} Span
    * @return {Array} Segs
    */
@@ -91,14 +63,8 @@ export default class ResourceDayGrid extends DayGrid {
     let rsCount = this.getAllowedResourcesColCount();
     let segs = this.sliceRangeByRow(span);
 
-    if (!rsCount || this.view.type !== "resourceDay") {
-      segs.forEach((sg) => {
-        sg.leftCol = this.isRTL ? seg.lastRowDayIndex : sg.firstRowDayIndex;
-        sg.rightCol = this.isRTL ? seg.firstRowDayIndex : sg.lastRowDayIndex;
-      });
-      return segs;
-    } else {
-      let rsSegs = [];
+    let rsSegs = [];
+    if (rsCount && this.view.type === "resourceDay") {
       segs.forEach((sg) => {
         let resources = this.getAllowedResources();
         resources.forEach((rs, i) => {
@@ -110,22 +76,11 @@ export default class ResourceDayGrid extends DayGrid {
           }
         });
       });
-      return rsSegs;
+    }else{
+      rsSegs = super.spanToSegs(span);
     }
-  }
 
-  /**
-   * Add resourse id to Span.
-   * @override
-   * @param  {Object} hit
-   * @return {Object} Span
-   */
-  getHitSpan(hit) {
-    let span = super.getHitSpan(hit);
-    if (this.getAllowedResourcesColCount()) {
-      span.resourceId = this.getResourceByCol(hit.col).id;
-    }
-    return span;
+    return rsSegs;
   }
 
 }

@@ -10,7 +10,9 @@ export function App(){
       center: '',
       right: 'resourceDay,resourceWeek,resourceMonth,agendaWeek,month,agendaDay'
     },
-    defaultView: 'resourceWeek',
+    defaultView: 'resourceDay',
+    allDaySlot: true,
+    // allDayDefault: false,
     views: {
       resourceDay: {
         renderRsHeaderItem: function(resource, isAllowed) {
@@ -51,8 +53,6 @@ export function App(){
     // maxTime: "20:00:00",
     slotDuration: '00:30:00',
     // slotLabelInterval : '0:30:00',
-    allDaySlot: false,
-    allDayDefault: false,
     // slotLabelFormat: 'H(:mm)A',
     // snapDuration: '0:01:00',
     defaultDate: '2015-12-14',
@@ -94,7 +94,8 @@ export function App(){
       { id: '5', resourceId: 's', start: '2015-12-14T08:00:00', end: '2015-12-14T09:30:00', title: 'event 5' },
       { id: '6', resourceId: 'd', start: '2015-12-15T10:00:00', end: '2015-12-15T15:00:00', title: 'event 6' },
       { id: '7', resourceId: 'f', start: '2015-12-14T09:00:00', end: '2015-12-14T11:00:00', title: 'event 7', color: '#257e4a' },
-      { id: '8', resourceId: 'a', start: '2015-12-16', end: '2015-12-17T12:00:00', title: 'event 8', color: '#257e4a' }
+      { id: '8', resourceId: 'a', start: '2015-12-16', end: '2015-12-17T12:00:00', title: 'event 8', color: '#257e4a' },
+      { id: '9', resourceId: 'a', start: '2015-12-14', end: '2015-12-15', title: 'event 9', color: '#ff0000' }
     ],
     // events: function(start, end, timezone, callback){
     //   debugger;

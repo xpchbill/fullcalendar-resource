@@ -1,14 +1,15 @@
 "use strict";
 
 import {TimeGrid, CoordCache, isInt, htmlEscape, divideDurationByDuration} from "../FC.js";
+import {BaseResourceGridMixin} from "../common/grid/BaseResourceGrid.js";
+import BaseResourceTimeGrid from "../common/grid/BaseResourceTimeGrid.js";
 import HeaderParser from "./temps/header/HeaderParser.js";
 import TimeGridParser from "./temps/timegrid/TimeGridParser.js";
 import SlatsLabel from "./temps/timegrid/SlatsLabel.html";
 import EventSkeleton from "../common/temps/EventSkeleton.html";
-import {BaseResourceGridMixin} from "../common/grid/BaseResourceGrid.js";
 import ObjectAssign from "object-assign";
 
-export default class ResourceTimeGrid extends TimeGrid {
+export default class ResourceTimeGrid extends BaseResourceTimeGrid {
 
   renderDates() {
     this.el.html(this.renderHtml());
@@ -88,17 +89,6 @@ export default class ResourceTimeGrid extends TimeGrid {
     return slatCells;
   }
 
-  /**
-   * Compute actual rendered grid column count.
-   * @override DayTableMixin.computeColCnt
-   * @return {Number}
-   */
-  computeColCnt() {
-    return this.getRenderedColCount();
-  }
-
-  bookendCells(){}
-
   renderSegTable(segs) {
     let tableEl = $(EventSkeleton({
       className: "content",
@@ -172,38 +162,14 @@ export default class ResourceTimeGrid extends TimeGrid {
 
   /**
    * @override
-   * @return {Array} Segs
-   */
-  renderFgEvents(events) {
-    let calendar = this.view.calendar;
-
-    let rsEvents = [];
-    events.forEach((evt) => {
-      let rsId = evt['resourceId'];
-      if (rsId && calendar.getAllowedResourceById(rsId)) {
-        rsEvents.push(evt);
-      }
-    });
-
-    return super.renderFgEvents(rsEvents);
-  }
-
-  /**
-   * @override
    * @param  {Object} Span
    * @return {Array} Segs
    */
   spanToSegs(span) {
     let rsCount = this.getAllowedResourcesColCount();
     let segs = this.sliceRangeByTimes(span);
-
-    if (!rsCount || this.view.type !== "resourceDay") {
-      segs.forEach((sg) => {
-        sg.col = sg.dayIndex;
-      });
-      return segs;
-    } else {
-      let rsSegs = [];
+    let rsSegs = [];
+    if (rsCount && this.view.type === "resourceDay") {
       segs.forEach((sg) => {
         let resources = this.getAllowedResources();
         resources.forEach((rs, i) => {
@@ -214,23 +180,14 @@ export default class ResourceTimeGrid extends TimeGrid {
           }
         });
       });
-      return rsSegs;
+    }else{
+      rsSegs = super.spanToSegs(span);
     }
+
+    return rsSegs;
   }
 
-  /**
-   * Add resourse id to Span.
-   * @override
-   * @param  {Object} hit
-   * @return {Object} Span
-   */
-  getHitSpan(hit) {
-    let span = super.getHitSpan(hit);
-    if (this.getAllowedResourcesColCount()) {
-      span.resourceId = this.getResourceByCol(hit.col).id;
-    }
-    return span;
-  }
+
 
 }
 

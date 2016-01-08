@@ -165,15 +165,42 @@ export default class BaseResourceGrid extends Grid{
    */
   computeSelectionSpan(startSpan, endSpan) {
     var selectionSpan;
-    if (startSpan.resourceId !== endSpan.resourceId) {
-      return;
-    }
-    selectionSpan = Grid.prototype.computeSelectionSpan.apply(this, arguments);
+  
+    selectionSpan = super.computeSelectionSpan(startSpan, endSpan);
     if (selectionSpan) {
       selectionSpan.resourceId = startSpan.resourceId;
     }
     return selectionSpan;
   }
+
+  /**
+   * @override
+   * @return {Array} Segs
+   */
+  renderFgEvents(events) {
+    let calendar = this.view.calendar;
+
+    let rsEvents = [];
+    events.forEach((evt) => {
+      let rsId = evt['resourceId'];
+      if (rsId && calendar.getAllowedResourceById(rsId)) {
+        rsEvents.push(evt);
+      }
+    });
+
+    return super.renderFgEvents(rsEvents);
+  }
+
+  /**
+   * Compute actual rendered grid column count.
+   * @override DayTableMixin.computeColCnt
+   * @return {Number}
+   */
+  computeColCnt() {
+    return this.getRenderedColCount();
+  }
+
+  bookendCells(){}
 
   getTotalColCount() {
     let resourceCount = this.getAllowedResourcesColCount(),
@@ -205,6 +232,9 @@ export let BaseResourceGridMixin = {
     getColDayIndex: BaseResourceGrid.prototype.getColDayIndex,
     getRenderedColCount: BaseResourceGrid.prototype.getRenderedColCount,
     computeSelectionSpan: BaseResourceGrid.prototype.computeSelectionSpan,
+    renderFgEvents: BaseResourceGrid.prototype.renderFgEvents,
+    computeColCnt: BaseResourceGrid.prototype.computeColCnt,
+    bookendCells: BaseResourceGrid.prototype.bookendCells,
     getTotalColCount: BaseResourceGrid.prototype.getTotalColCount,
     getLimitColWidthAttr: BaseResourceGrid.prototype.getLimitColWidthAttr
 }
