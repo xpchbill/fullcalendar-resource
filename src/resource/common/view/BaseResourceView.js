@@ -1,19 +1,9 @@
 "use strict";
 
-import {AgendaView} from "../FC.js";
-import SyncScrollers from "../tools/SyncScrollers.js";
+import {View} from "../../FC.js";
+import SyncScrollers from "../../tools/SyncScrollers.js";
 
-export default class ResourceView extends AgendaView{
-
-  /**
-   * Gain rsManager instance from Calendar.
-   * @constructor
-   * @param  {*} ...args [calendar, type, options, intervalDuration]
-   */
-  constructor(...args) {
-    super(...args);
-    this.rsManager = this.calendar.rsManager;
-  }
+export default class BaseResourceView extends View{
 
   /**
    * Fetch resources before rendering view.
@@ -40,7 +30,6 @@ export default class ResourceView extends AgendaView{
       super.displayView(date);
       dfd.resolve();
     }
-    this.addResourceListener();
     return dfd;
   }
 
@@ -54,10 +43,6 @@ export default class ResourceView extends AgendaView{
     fetchingStatus.promise.then(() => {
       super.displayEvents(events);
     });
-  }
-
-  renderDates() {
-    this.el.addClass("fc-resource-view");
   }
 
   addResourceListener() {
@@ -75,7 +60,10 @@ export default class ResourceView extends AgendaView{
 
   redisplay(remainScrollPosition) {
     let position;
-    if(remainScrollPosition){
+    if(this !== this.calendar.view){
+      return;
+    }
+    if(remainScrollPosition && this.timeGrid){
       let scrollBar = this.timeGrid.el.parent(".fc-scroll-bars");
       position = SyncScrollers.getScrollPosition(scrollBar);
     }
@@ -90,7 +78,7 @@ export default class ResourceView extends AgendaView{
         this.displayEvents(events);
       }
     }
-    if(remainScrollPosition){
+    if(remainScrollPosition && this.timeGrid){
       let scrollBar = this.timeGrid.el.parent(".fc-scroll-bars");
       SyncScrollers.scrollToPosition(scrollBar, position);
     }
@@ -113,4 +101,14 @@ export default class ResourceView extends AgendaView{
       this, this.rsManager.getResourceById(span.resourceId)
     );
   }
+}
+
+export let BaseResourceViewMixin = {
+  displayView: BaseResourceView.prototype.displayView,
+  displayEvents: BaseResourceView.prototype.displayEvents,
+  addResourceListener: BaseResourceView.prototype.addResourceListener,
+  addResourceSuccessful: BaseResourceView.prototype.addResourceSuccessful,
+  deleteResourceSuccessful: BaseResourceView.prototype.deleteResourceSuccessful,
+  redisplay: BaseResourceView.prototype.redisplay,
+  triggerSelect: BaseResourceView.prototype.triggerSelect
 }

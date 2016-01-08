@@ -3,13 +3,13 @@
 import "./day.less";
 
 import {matchCellWidths} from "../FC.js";
-import ResourceView from "../common/ResourceView.js";
+import BaseResourceAgendaView from "../common/view/BaseResourceAgendaView.js";
 import ResourceTimeGrid from "./ResourceTimeGrid.js";
 import ResourceDayGrid from "./ResourceDayGrid.js";
 import SkeletonParser from "./temps/skeleton/SkeletonParser.js";
 import SyncScrollers from "../tools/SyncScrollers.js";
 
-export default class ResourceDayView extends ResourceView {
+export default class ResourceDayView extends BaseResourceAgendaView {
 
   /**
    * @constructor
@@ -24,9 +24,12 @@ export default class ResourceDayView extends ResourceView {
     return skeletonParser.parse()
   }
 
-  renderDates() {
+  renderDates(emitFromChildView) {
     super.renderDates();
-    this.el.addClass("fc-resource-day-view").html(this.renderSkeletonHtml());
+    if(!emitFromChildView){
+      this.el.addClass("fc-resource-day-view");
+    }
+    this.el.html(this.renderSkeletonHtml());
     this.renderHead();
     this.setGridElement();
     this.timeGrid.renderDates();

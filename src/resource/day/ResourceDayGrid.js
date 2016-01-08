@@ -3,7 +3,7 @@
 import {DayGrid, htmlEscape} from "../FC.js";
 import DayGridParser from "./temps/daygrid/DayGridParser.js";
 import EventSkeleton from "../common/temps/EventSkeleton.html";
-import ResourceGridMixin from "../common/ResourceGridMixin.js";
+import {BaseResourceGridMixin} from "../common/grid/BaseResourceGrid.js";
 import ObjectAssign from "object-assign";
 
 export default class ResourceDayGrid extends DayGrid {
@@ -129,4 +129,4 @@ export default class ResourceDayGrid extends DayGrid {
   }
 
 }
-ObjectAssign(ResourceDayGrid.prototype, ResourceGridMixin);
+ObjectAssign(ResourceDayGrid.prototype, BaseResourceGridMixin);

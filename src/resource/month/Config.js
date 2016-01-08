@@ -1,20 +1,20 @@
 "use strict";
 
-import ResourceWeekView from "./ResourceWeekView.js";
+import ResourceMonthView from "./ResourceMonthView.js";
 
 /**
  * Configuration of resource week view.
  */
 export default {
-  "type": "agenda",
-  "class": ResourceWeekView,
+  "class": ResourceMonthView,
   "defaults": {
     "limitHeaderWidth": 190,
     "defaultResourcesIndex": 0,
     "fixedAxisWidth": 50,
-    "buttonText": "rsweek"
+    "fixedWeekCount": true,
+    "buttonText": "rsmonth"
   },
   "duration": {
-    "week": 1
+    "months": 1
   }
 }

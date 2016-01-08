@@ -23,6 +23,8 @@ export let views = FC.views;
 
 export let AgendaView = FC.AgendaView;
 
+export let MonthView = FC.MonthView;
+
 /* util modules */
 export let htmlEscape = FC.htmlEscape;
 export let moment = FC.moment;

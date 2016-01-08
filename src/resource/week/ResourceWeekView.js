@@ -35,7 +35,7 @@ export default class ResourceWeekView extends ResourceDayView {
   }
 
   renderDates() {
-    super.renderDates();
+    super.renderDates(true);
     this.el.addClass("fc-resource-week-view");
     this.addHeaderEvent();
   }

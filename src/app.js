@@ -8,8 +8,9 @@ export function App(){
     header: {
       left: 'today prev,next title',
       center: '',
-      right: 'resourceDay,resourceWeek,agendaWeek,month,agendaDay'
+      right: 'resourceDay,resourceWeek,resourceMonth,agendaWeek,month,agendaDay'
     },
+    defaultView: 'resourceWeek',
     views: {
       resourceDay: {
         renderRsHeaderItem: function(resource, isAllowed) {
@@ -26,24 +27,45 @@ export function App(){
           resource.title +
           "</div>";
         }
+      },
+      resourceMonth: {
+        renderRsHeaderItem: function(resource, isAllowed) {
+          return "<div style='margin:15px 0px;'>" +
+          "<span style='background:orange;padding:1px 4px;font-size:10px;color:#fff;border-radius:3px;'>E</span> " +
+          resource.title +
+          "</div>";
+        }
       }
     },
+    buttonIcons: {
+      prev: 'left-single-arrow',
+      next: 'right-single-arrow',
+      prevYear: 'left-double-arrow',
+      nextYear: 'right-double-arrow'
+    },
+    firstDay: 1,
     contentHeight: 550,
     businessHours: false,
+    // timeFormat: 'H(:mm)',
     // minTime: "06:00:00",
     // maxTime: "20:00:00",
     slotDuration: '00:30:00',
+    // slotLabelInterval : '0:30:00',
     allDaySlot: false,
-    defaultView: 'resourceDay',
+    allDayDefault: false,
+    // slotLabelFormat: 'H(:mm)A',
+    // snapDuration: '0:01:00',
     defaultDate: '2015-12-14',
     editable: true,
     selectable: true,
+    // scrollTime: '06:00:00',
+    // slotEventOverlap: false,
     eventLimit: true, // allow "more" link when too many events
-    /*columnFormat: {
-      month: 'ddd',
-      week: 'ddd d.',
-      day: 'dddd d. M'
-    },*/
+    // columnFormat: {
+    //   month: 'ddd',
+    //   week: 'ddd d.',
+    //   day: 'dddd d. M'
+    // },
     resources: [
       { id: 'a', title: 'Resource A' },
       { id: 'b', title: 'Resource B' },
@@ -72,8 +94,25 @@ export function App(){
       { id: '5', resourceId: 's', start: '2015-12-14T08:00:00', end: '2015-12-14T09:30:00', title: 'event 5' },
       { id: '6', resourceId: 'd', start: '2015-12-15T10:00:00', end: '2015-12-15T15:00:00', title: 'event 6' },
       { id: '7', resourceId: 'f', start: '2015-12-14T09:00:00', end: '2015-12-14T11:00:00', title: 'event 7', color: '#257e4a' },
-      { id: '8', resourceId: 'a', start: '2015-12-14', end: '2015-12-16', title: 'event 8', color: '#257e4a' }
+      { id: '8', resourceId: 'a', start: '2015-12-16', end: '2015-12-17T12:00:00', title: 'event 8', color: '#257e4a' }
     ],
+    // events: function(start, end, timezone, callback){
+    //   debugger;
+    // },
+    // eventDataTransform: function(event){
+    //   event.title += " * be transformed!";
+    //   return event;
+    // },
+    dayClick: function(date, jsEvent, view) {
+      // alert('Clicked on: ' + date.format());
+      // alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+      // alert('Current view: ' + view.name);
+    },
+    eventClick: function(event, element){
+      event.title += " * Clicked!";
+      $('#calendar').fullCalendar('updateEvent', event);
+      // $('#calendar').fullCalendar('changeView', 'agendaDay');
+    },
     select: function(start, end, jsEvent, view, resource) {
       console.log(
         'select',

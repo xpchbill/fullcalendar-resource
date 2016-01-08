@@ -5,7 +5,7 @@ import HeaderParser from "./temps/header/HeaderParser.js";
 import TimeGridParser from "./temps/timegrid/TimeGridParser.js";
 import SlatsLabel from "./temps/timegrid/SlatsLabel.html";
 import EventSkeleton from "../common/temps/EventSkeleton.html";
-import ResourceGridMixin from "../common/ResourceGridMixin.js";
+import {BaseResourceGridMixin} from "../common/grid/BaseResourceGrid.js";
 import ObjectAssign from "object-assign";
 
 export default class ResourceTimeGrid extends TimeGrid {
@@ -218,11 +218,6 @@ export default class ResourceTimeGrid extends TimeGrid {
     }
   }
 
-  rerenderHeader() {
-    this.view.headContainerEl.html("");
-    this.view.renderHead();
-  }
-
   /**
    * Add resourse id to Span.
    * @override
@@ -239,4 +234,4 @@ export default class ResourceTimeGrid extends TimeGrid {
 
 }
 
-ObjectAssign(ResourceTimeGrid.prototype, ResourceGridMixin)
+ObjectAssign(ResourceTimeGrid.prototype, BaseResourceGridMixin)

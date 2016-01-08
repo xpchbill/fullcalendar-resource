@@ -6,7 +6,7 @@ import ResourceDayView from "./ResourceDayView.js";
  * Configuration of resource day view.
  */
 export default {
-  type: "agenda",
+  "type": "agenda",
   "class": ResourceDayView,
   "defaults": {
     "fixedAxisWidth": 50,
@@ -14,6 +14,6 @@ export default {
     "buttonText": "rsday"
   },
   duration: {
-    days: 1
+    "days": 1
   }
 }
