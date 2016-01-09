@@ -1,6 +1,6 @@
 "use strict";
 
-import {View} from "../../FC.js";
+import {View, createProtoMixinObject} from "../../FC.js";
 import SyncScrollers from "../../tools/SyncScrollers.js";
 
 export default class BaseResourceView extends View{
@@ -85,30 +85,42 @@ export default class BaseResourceView extends View{
     return position;
   }
 
+  select(span, ev) {
+		this.unselect(ev);
+		let segs = this.renderSelection(span);
+		this.reportSelection(segs, ev);
+	}
+
   /**
    * Add argument resource to this.trigger call.
    * @override
    * @param  {Moment} span
    * @param  {Object} event
    */
-  triggerSelect(span, ev) {
+  triggerSelect(segs, ev) {
     this.trigger(
       'select',
       null,
-      this.calendar.applyTimezone(span.start),
-      this.calendar.applyTimezone(span.end),
-      ev,
-      this, this.rsManager.getResourceById(span.resourceId)
+      segs,
+      ev
     );
+    // this.trigger(
+    //   'select',
+    //   null,
+    //   this.calendar.applyTimezone(span.start),
+    //   this.calendar.applyTimezone(span.end),
+    //   ev
+    // );
   }
 }
 
-export let BaseResourceViewMixin = {
-  displayView: BaseResourceView.prototype.displayView,
-  displayEvents: BaseResourceView.prototype.displayEvents,
-  addResourceListener: BaseResourceView.prototype.addResourceListener,
-  addResourceSuccessful: BaseResourceView.prototype.addResourceSuccessful,
-  deleteResourceSuccessful: BaseResourceView.prototype.deleteResourceSuccessful,
-  redisplay: BaseResourceView.prototype.redisplay,
-  triggerSelect: BaseResourceView.prototype.triggerSelect
-}
+export let BaseResourceViewMixin = createProtoMixinObject(BaseResourceView.prototype, [
+  "displayView",
+  "displayEvents",
+  "addResourceListener",
+  "addResourceSuccessful",
+  "deleteResourceSuccessful",
+  "redisplay",
+  "select",
+  "triggerSelect"
+]);

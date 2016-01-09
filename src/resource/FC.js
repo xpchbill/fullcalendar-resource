@@ -43,3 +43,12 @@ export function matchCellWidths(els) {
   els.width(maxInnerWidth);
   return maxInnerWidth;
 }
+export function createProtoMixinObject(protoObject, protos) {
+  let movedObject = {};
+  protos.forEach((pro) => {
+    if(protoObject[pro]){
+      movedObject[pro] = protoObject[pro];
+    }
+  });
+  return movedObject;
+}

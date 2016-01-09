@@ -79,7 +79,6 @@ export default class ResourceDayGrid extends BaseResourceDayGrid {
     }else{
       rsSegs = super.spanToSegs(span);
     }
-
     return rsSegs;
   }
 

@@ -114,13 +114,15 @@ export function App(){
       $('#calendar').fullCalendar('updateEvent', event);
       // $('#calendar').fullCalendar('changeView', 'agendaDay');
     },
-    select: function(start, end, jsEvent, view, resource) {
-      console.log(
-        'select',
-        start.format(),
-        end.format(),
-        resource ? resource.id : '(no resource)'
-      );
+    select: function(segs, jsEvent) {
+      segs.forEach((seg) => {
+        console.log(
+          'select',
+          seg.start.format(),
+          seg.end.format(),
+          seg.resource
+        );
+      });
     }
   });
 }

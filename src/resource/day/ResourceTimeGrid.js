@@ -187,8 +187,6 @@ export default class ResourceTimeGrid extends BaseResourceTimeGrid {
     return rsSegs;
   }
 
-
-
 }
 
 ObjectAssign(ResourceTimeGrid.prototype, BaseResourceGridMixin)

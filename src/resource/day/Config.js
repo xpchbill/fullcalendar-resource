@@ -14,6 +14,6 @@ export default {
     "buttonText": "rsday"
   },
   duration: {
-    "days": 1
+    "days": 2
   }
 }

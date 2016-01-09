@@ -1,6 +1,6 @@
 "use strict";
 
-import {Grid, DayTableMixin, htmlEscape} from "../../FC.js";
+import {Grid, DayTableMixin, htmlEscape, createProtoMixinObject} from "../../FC.js";
 import HeadIntro from "./temps/HeadIntro.html";
 import NumberIntro from "./temps/NumberIntro.html";
 import BgIntro from "./temps/BgIntro.html";
@@ -108,6 +108,17 @@ export default class BaseResourceGrid extends Grid{
     return Math.floor(col / this.daysPerRow);
   }
 
+  getResourceIndexById(id) {
+    let index,
+        resources = this.getAllowedResources();
+    resources.forEach((rs, i) => {
+      if(rs.id === id){
+        index = i;
+      }
+    });
+    return index;
+  }
+
   /**
    * Get grid column num by resource index and day index.
    * @param  {Number} resourceIndex
@@ -144,6 +155,16 @@ export default class BaseResourceGrid extends Grid{
     return this.getDayIndexByCol(col);
   }
 
+  getDayIndexBySpan(span) {
+    let dayIndex = 0;
+    this.dayDates.forEach((dayDate, index) => {
+      if(span.start >= dayDate.clone().time(this.minTime) && span.start <= dayDate.clone().time(this.maxTime)){
+        dayIndex = index;
+      }
+    });
+    return dayIndex;
+  }
+
   /**
    * Compute actual rendered grid column count by rousources
    * and daysPerRow(duration configuration).
@@ -165,7 +186,7 @@ export default class BaseResourceGrid extends Grid{
    */
   computeSelectionSpan(startSpan, endSpan) {
     var selectionSpan;
-  
+
     selectionSpan = super.computeSelectionSpan(startSpan, endSpan);
     if (selectionSpan) {
       selectionSpan.resourceId = startSpan.resourceId;
@@ -213,28 +234,81 @@ export default class BaseResourceGrid extends Grid{
     return limitColWidth ? "width=" + limitColWidth : "";
   }
 
+  computeSelection(startSpan, endSpan) {
+
+    let startSpanTime = startSpan.start.time(),
+        endSpanTime = endSpan.start.time();
+
+    let startTime = startSpanTime - endSpanTime < 0 ? startSpanTime : endSpanTime,
+        endTime = startSpanTime - endSpanTime < 0 ? endSpanTime : startSpanTime;
+
+
+    let startSpanDayIndex = this.getDayIndexBySpan(startSpan),
+        endSpanDayIndex = this.getDayIndexBySpan(endSpan);
+
+    let startSpanRsIndex = this.getResourceIndexById(startSpan.resourceId),
+        endSpanRsIndex = this.getResourceIndexById(endSpan.resourceId);
+
+    let startSpanCol = this.getColByRsAndDayIndex(startSpanRsIndex, startSpanDayIndex),
+        endSpanCol = this.getColByRsAndDayIndex(endSpanRsIndex, endSpanDayIndex);
+
+    let startCol = Math.min(startSpanCol, endSpanCol),
+        endCol = Math.max(startSpanCol, endSpanCol);
+
+        // console.log(startCol + " *** " + endCol);
+    let segs = [];
+    for(let col = startCol; col <= endCol; col++){
+      let dayIndex = this.getDayIndexByCol(col),
+          dayDate = this.dayDates[dayIndex];
+      segs.push({
+        col: col,
+        isStart: true,
+        isEnd: true,
+        start: dayDate.clone().time(startTime),
+        end: dayDate.clone().time(endTime),
+        resource: this.getResourceByCol(col)
+      });
+    }
+    // debugger;
+    return segs;
+  }
+
+  renderSelection(segs) {
+    this.renderHighlight(segs);
+    return segs;
+  }
+
+  renderHighlight(segs) {
+		this.renderFill('highlight', segs);
+	}
+
 }
 
-export let BaseResourceGridMixin = {
-    renderHeadIntroHtml: BaseResourceGrid.prototype.renderHeadIntroHtml,
-    renderNumberIntroHtml: BaseResourceGrid.prototype.renderNumberIntroHtml,
-    renderBgIntroHtml: BaseResourceGrid.prototype.renderBgIntroHtml,
-    renderIntroHtml: BaseResourceGrid.prototype.renderIntroHtml,
-    renderResources: BaseResourceGrid.prototype.renderResources,
-    getAllowedResources: BaseResourceGrid.prototype.getAllowedResources,
-    getAllowedResourcesCount: BaseResourceGrid.prototype.getAllowedResourcesCount,
-    getAllowedResourcesColCount: BaseResourceGrid.prototype.getAllowedResourcesColCount,
-    transformEventSpan: BaseResourceGrid.prototype.transformEventSpan,
-    getResourceByCol: BaseResourceGrid.prototype.getResourceByCol,
-    getResourceIndexByCol: BaseResourceGrid.prototype.getResourceIndexByCol,
-    getColByRsAndDayIndex: BaseResourceGrid.prototype.getColByRsAndDayIndex,
-    getDayIndexByCol: BaseResourceGrid.prototype.getDayIndexByCol,
-    getColDayIndex: BaseResourceGrid.prototype.getColDayIndex,
-    getRenderedColCount: BaseResourceGrid.prototype.getRenderedColCount,
-    computeSelectionSpan: BaseResourceGrid.prototype.computeSelectionSpan,
-    renderFgEvents: BaseResourceGrid.prototype.renderFgEvents,
-    computeColCnt: BaseResourceGrid.prototype.computeColCnt,
-    bookendCells: BaseResourceGrid.prototype.bookendCells,
-    getTotalColCount: BaseResourceGrid.prototype.getTotalColCount,
-    getLimitColWidthAttr: BaseResourceGrid.prototype.getLimitColWidthAttr
-}
+export let BaseResourceGridMixin = createProtoMixinObject(BaseResourceGrid.prototype, [
+    "renderHeadIntroHtml",
+    "renderNumberIntroHtml",
+    "renderBgIntroHtml",
+    "renderIntroHtml",
+    "renderResources",
+    "getAllowedResources",
+    "getAllowedResourcesCount",
+    "getAllowedResourcesColCount",
+    "transformEventSpan",
+    "getResourceByCol",
+    "getResourceIndexByCol",
+    "getResourceIndexById",
+    "getColByRsAndDayIndex",
+    "getDayIndexByCol",
+    "getColDayIndex",
+    "getDayIndexBySpan",
+    "getRenderedColCount",
+    "computeSelectionSpan",
+    "renderFgEvents",
+    "computeColCnt",
+    "bookendCells",
+    "getTotalColCount",
+    "getLimitColWidthAttr",
+    "computeSelection",
+    "renderSelection",
+    "renderHighlight"
+]);
