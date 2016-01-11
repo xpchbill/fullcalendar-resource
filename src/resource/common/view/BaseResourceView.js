@@ -85,7 +85,6 @@ export default class BaseResourceView extends View{
     return position;
   }
 
-
   /**
    * Add argument resource to this.trigger call.
    * @override
@@ -93,11 +92,8 @@ export default class BaseResourceView extends View{
    * @param  {Object} event
    */
   triggerSelect(segs, ev) {
-    if(this.dayGrid && this.dayGrid.selectionWireFrameEl){
-      this.dayGrid.selectionWireFrameEl.hide();
-    }
-    if(this.timeGrid && this.timeGrid.selectionWireFrameEl){
-      this.timeGrid.selectionWireFrameEl.hide();
+    if(this.timeGrid && this.timeGrid.hideWireFrame){
+      this.timeGrid.hideWireFrame();
     }
     this.trigger(
       'select',

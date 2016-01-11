@@ -20,10 +20,10 @@ export default class BaseResourceTimeGrid extends TimeGrid{
 
   queryHit(leftOffset, topOffset) {
     let hit = super.queryHit(leftOffset, topOffset);
-    return ObjectAssign(hit, {
+    return hit ? ObjectAssign(hit, {
       evtMouseX: leftOffset,
       evtMouseY: topOffset
-    });
+    }) : hit;
   }
 
   /**
@@ -97,14 +97,7 @@ export default class BaseResourceTimeGrid extends TimeGrid{
   }
 
   createSelectionWireFrame() {
-    this.selectionWireFrameEl = $("<div>").css({
-      "position": "absolute",
-      "background": "#7FCEFF",
-      "border": "1px solid #000000",
-      "overflow": "hidden",
-      "opacity": 0.75,
-      "zIndex": 2
-    });
+    this.selectionWireFrameEl = $("<div>").addClass("selection-wireframe").css("position", "absolute");
     this.el.append(this.selectionWireFrameEl);
   }
 
@@ -116,12 +109,27 @@ export default class BaseResourceTimeGrid extends TimeGrid{
       "top": (top - origin.top) + "px",
       "left": (left - origin.left) + "px",
       "width": Math.abs(startSpan.evtMouseX - endSpan.evtMouseX) + "px",
-      "height": Math.abs(startSpan.evtMouseY - endSpan.evtMouseY) + "px"
-    }).show();
+      "height": Math.abs(startSpan.evtMouseY - endSpan.evtMouseY) + "px",
+      "visibility": "visible"
+    });
+  }
+
+  unrenderHighlight() {
+    super.unrenderHighlight();
+    this.hideWireFrame();
+  }
+
+  hideWireFrame() {
+    if(this.selectionWireFrameEl){
+      this.selectionWireFrameEl.css("visibility", "hidden");
+    }
   }
 
   destroy() {
-    this.selectionWireFrameEl = null;
+    if(this.selectionWireFrameEl){
+      this.selectionWireFrameEl.remove();
+      this.selectionWireFrameEl = null;
+    }
   }
 
 }

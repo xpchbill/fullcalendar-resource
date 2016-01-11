@@ -14,6 +14,12 @@ export function App(){
     allDaySlot: true,
     selectWireframeShow: true,
     // allDayDefault: false,
+    defaultDate: '2015-12-14',
+    dates: [
+      '2015-12-14',
+      '2015-12-17',
+      '2015-12-19'
+    ],
     views: {
       resourceDay: {
         renderRsHeaderItem: function(resource, isAllowed) {
@@ -56,17 +62,16 @@ export function App(){
     // slotLabelInterval : '0:30:00',
     // slotLabelFormat: 'H(:mm)A',
     // snapDuration: '0:01:00',
-    defaultDate: '2015-12-14',
     editable: true,
     selectable: true,
     // scrollTime: '06:00:00',
     // slotEventOverlap: false,
     eventLimit: true, // allow "more" link when too many events
-    // columnFormat: {
-    //   month: 'ddd',
-    //   week: 'ddd d.',
-    //   day: 'dddd d. M'
-    // },
+    columnFormat: {
+      month: 'ddd',
+      week: 'ddd d.',
+      day: 'dddd d. M'
+    },
     resources: [
       { id: 'a', title: 'Resource A' },
       { id: 'b', title: 'Resource B' },

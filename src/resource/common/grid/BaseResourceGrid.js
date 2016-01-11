@@ -233,6 +233,20 @@ export default class BaseResourceGrid extends Grid{
     let limitColWidth = this.view.opt("limitColWidth");
     return limitColWidth ? "width=" + limitColWidth : "";
   }
+
+  // updateDayTable() {
+  //   let calendar = this.view.calendar;
+  //   this.dayDates = [
+  //     calendar.moment("2015-12-14"),
+  //     calendar.moment("2015-12-17"),
+  //     calendar.moment("2015-12-19")
+  //   ];
+	// 	this.dayIndices = [0, 1, 2];
+	// 	this.daysPerRow = 3;
+	// 	this.rowCnt = 1;
+  //
+	// 	this.updateDayTableCols();
+  // }
 }
 
 export let BaseResourceGridMixin = createProtoMixinObject(BaseResourceGrid.prototype, [
@@ -258,5 +272,6 @@ export let BaseResourceGridMixin = createProtoMixinObject(BaseResourceGrid.proto
     "computeColCnt",
     "bookendCells",
     "getTotalColCount",
-    "getLimitColWidthAttr"
+    "getLimitColWidthAttr"/*,
+    "updateDayTable"*/
 ]);
