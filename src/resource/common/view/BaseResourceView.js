@@ -106,6 +106,16 @@ export default class BaseResourceView extends View{
       ev
     );
   }
+
+  destroy() {
+    if(this.dayGrid && this.dayGrid.destroy){
+      this.dayGrid.destroy();
+    }
+    if(this.timeGrid && this.timeGrid.destroy){
+      this.timeGrid.destroy();
+    }
+  }
+
 }
 
 export let BaseResourceViewMixin = createProtoMixinObject(BaseResourceView.prototype, [
@@ -115,5 +125,6 @@ export let BaseResourceViewMixin = createProtoMixinObject(BaseResourceView.proto
   "addResourceSuccessful",
   "deleteResourceSuccessful",
   "redisplay",
-  "triggerSelect"
+  "triggerSelect",
+  "destroy"
 ]);

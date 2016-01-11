@@ -120,4 +120,8 @@ export default class BaseResourceTimeGrid extends TimeGrid{
     }).show();
   }
 
+  destroy() {
+    this.selectionWireFrameEl = null;
+  }
+
 }
