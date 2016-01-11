@@ -85,11 +85,6 @@ export default class BaseResourceView extends View{
     return position;
   }
 
-  select(span, ev) {
-		this.unselect(ev);
-		let segs = this.renderSelection(span);
-		this.reportSelection(segs, ev);
-	}
 
   /**
    * Add argument resource to this.trigger call.
@@ -98,19 +93,18 @@ export default class BaseResourceView extends View{
    * @param  {Object} event
    */
   triggerSelect(segs, ev) {
+    if(this.dayGrid && this.dayGrid.selectionWireFrameEl){
+      this.dayGrid.selectionWireFrameEl.hide();
+    }
+    if(this.timeGrid && this.timeGrid.selectionWireFrameEl){
+      this.timeGrid.selectionWireFrameEl.hide();
+    }
     this.trigger(
       'select',
       null,
       segs,
       ev
     );
-    // this.trigger(
-    //   'select',
-    //   null,
-    //   this.calendar.applyTimezone(span.start),
-    //   this.calendar.applyTimezone(span.end),
-    //   ev
-    // );
   }
 }
 
@@ -121,6 +115,5 @@ export let BaseResourceViewMixin = createProtoMixinObject(BaseResourceView.proto
   "addResourceSuccessful",
   "deleteResourceSuccessful",
   "redisplay",
-  "select",
   "triggerSelect"
 ]);

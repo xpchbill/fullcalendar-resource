@@ -12,6 +12,7 @@ export function App(){
     },
     defaultView: 'resourceDay',
     allDaySlot: true,
+    selectWireframeShow: true,
     // allDayDefault: false,
     views: {
       resourceDay: {
@@ -87,9 +88,9 @@ export function App(){
       { id: 's', title: 'Resource S' }
     ],
     events: [
-      { id: '1', resourceId: 'a', start: '2015-12-14T08:00:00', end: '2015-12-14T14:00:00', title: 'event 1' },
+      { id: '1', resourceId: 'a', start: '2015-12-14T03:00:00', end: '2015-12-14T14:00:00', title: 'event 1' },
       { id: '2', resourceId: 'b', start: '2015-12-14T09:00:00', end: '2015-12-14T14:00:00', title: 'event 2', color: '#257e4a' },
-      { id: '3', resourceId: 'a', start: '2015-12-14T12:00:00', end: '2015-12-14T06:00:00', title: 'event 3' },
+      { id: '3', resourceId: 'a', start: '2015-12-14T04:00:00', end: '2015-12-14T16:00:00', title: 'event 3' },
       { id: '4', resourceId: 'c', start: '2015-12-14T07:30:00', end: '2015-12-14T09:30:00', title: 'event 4' },
       { id: '5', resourceId: 's', start: '2015-12-14T08:00:00', end: '2015-12-14T09:30:00', title: 'event 5' },
       { id: '6', resourceId: 'd', start: '2015-12-15T10:00:00', end: '2015-12-15T15:00:00', title: 'event 6' },
@@ -114,6 +115,7 @@ export function App(){
       $('#calendar').fullCalendar('updateEvent', event);
       // $('#calendar').fullCalendar('changeView', 'agendaDay');
     },
+
     select: function(segs, jsEvent) {
       segs.forEach((seg) => {
         console.log(

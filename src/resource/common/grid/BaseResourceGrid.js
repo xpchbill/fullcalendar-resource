@@ -233,55 +233,6 @@ export default class BaseResourceGrid extends Grid{
     let limitColWidth = this.view.opt("limitColWidth");
     return limitColWidth ? "width=" + limitColWidth : "";
   }
-
-  computeSelection(startSpan, endSpan) {
-
-    let startSpanTime = startSpan.start.time(),
-        endSpanTime = endSpan.start.time();
-
-    let startTime = startSpanTime - endSpanTime < 0 ? startSpanTime : endSpanTime,
-        endTime = startSpanTime - endSpanTime < 0 ? endSpanTime : startSpanTime;
-
-
-    let startSpanDayIndex = this.getDayIndexBySpan(startSpan),
-        endSpanDayIndex = this.getDayIndexBySpan(endSpan);
-
-    let startSpanRsIndex = this.getResourceIndexById(startSpan.resourceId),
-        endSpanRsIndex = this.getResourceIndexById(endSpan.resourceId);
-
-    let startSpanCol = this.getColByRsAndDayIndex(startSpanRsIndex, startSpanDayIndex),
-        endSpanCol = this.getColByRsAndDayIndex(endSpanRsIndex, endSpanDayIndex);
-
-    let startCol = Math.min(startSpanCol, endSpanCol),
-        endCol = Math.max(startSpanCol, endSpanCol);
-
-        // console.log(startCol + " *** " + endCol);
-    let segs = [];
-    for(let col = startCol; col <= endCol; col++){
-      let dayIndex = this.getDayIndexByCol(col),
-          dayDate = this.dayDates[dayIndex];
-      segs.push({
-        col: col,
-        isStart: true,
-        isEnd: true,
-        start: dayDate.clone().time(startTime),
-        end: dayDate.clone().time(endTime),
-        resource: this.getResourceByCol(col)
-      });
-    }
-    // debugger;
-    return segs;
-  }
-
-  renderSelection(segs) {
-    this.renderHighlight(segs);
-    return segs;
-  }
-
-  renderHighlight(segs) {
-		this.renderFill('highlight', segs);
-	}
-
 }
 
 export let BaseResourceGridMixin = createProtoMixinObject(BaseResourceGrid.prototype, [
@@ -307,8 +258,5 @@ export let BaseResourceGridMixin = createProtoMixinObject(BaseResourceGrid.proto
     "computeColCnt",
     "bookendCells",
     "getTotalColCount",
-    "getLimitColWidthAttr",
-    "computeSelection",
-    "renderSelection",
-    "renderHighlight"
+    "getLimitColWidthAttr"
 ]);
