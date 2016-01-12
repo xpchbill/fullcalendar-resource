@@ -176,7 +176,7 @@
 	    "buttonText": "rsday"
 	  },
 	  duration: {
-	    "days": 2
+	    "days": 1
 	  }
 	};
 
