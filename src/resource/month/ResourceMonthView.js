@@ -13,6 +13,7 @@ export default class ResourceMonthView extends BaseResourceMonthView {
     super(...args);
   }
 
+
   /**
    * @override
    * @return {Class} Instance of ResourceDayGrid.
