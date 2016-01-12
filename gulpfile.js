@@ -203,7 +203,7 @@ gulp.task("git-add", function(){
 
 gulp.task("git-commit", function(){
   return gulp.src(["./dist/css/*", "./dist/js/*"])
-    .pipe(git.add("deploy commit"));
+    .pipe(git.commit("deploy commit"));
 });
 
 gulp.task("git-push", function(){

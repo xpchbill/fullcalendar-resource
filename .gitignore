@@ -1,7 +1,6 @@
 #dist
-dist
-!dist/css/
-!dist/js/
+dist/*.*
+dist/lib
 
 # npm modules
 node_modules
