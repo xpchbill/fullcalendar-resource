@@ -1,17 +1,7 @@
 #dist
 dist
-!dist/css/*
-!dist/js/*
+!dist/css/
+!dist/js/
 
 # npm modules
 node_modules
-
-
-# full calendar
-fullcalendar
-
-# fullcalendar source
-!lib/fullcalendar
-
-# eliminate jquery's dist directory
-!lib/**/dist
