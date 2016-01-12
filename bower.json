@@ -6,21 +6,17 @@
   "keywords": [
     "calendar",
     "fullcalendar",
+    "fullcalendar resource view",
     "fullcalendar-resource"
   ],
-  "homepage": "",
-  "bugs": "",
   "repository": {
     "type": "git",
     "url": "https://github.com/xpchbill/fullcalendar-resource.git"
   },
-  "license": {
-    "type": "MIT"
-  },
+  "license": "MIT",
   "author": {
     "name": "Bill Xiong"
   },
-  "copyright": "",
   "dependencies": {
     "jquery": ">=1.7.1",
     "moment": ">=2.5.0"

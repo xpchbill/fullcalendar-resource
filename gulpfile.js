@@ -2,6 +2,7 @@
 
 var fs = require("fs");
 var gulp = require("gulp");
+var git = require("gulp-git");
 var runSeq = require("run-sequence");
 var inject = require("gulp-inject");
 var changed = require("gulp-changed");
@@ -188,5 +189,27 @@ gulp.task("browserSync", function() {
     },
     files: ["dist/*"],
     startPath: "/"
+  });
+});
+
+gulp.task("deploy", function(done) {
+  return runSeq("clean", "prodBuild", "prodCopyLibs", "copyInjectedFiles", "git-add", "git-commit", "git-push", done);
+});
+
+gulp.task("git-add", function(){
+  return gulp.src(["./dist/css/*", "./dist/js/*"])
+    .pipe(git.add());
+});
+
+gulp.task("git-commit", function(){
+  return gulp.src(["./dist/css/*", "./dist/js/*"])
+    .pipe(git.add("deploy commit"));
+});
+
+gulp.task("git-push", function(){
+  git.push("origin", "master", function(err) {
+    if(err){
+      console.log("Git push error: " + err);
+    }
   });
 });
