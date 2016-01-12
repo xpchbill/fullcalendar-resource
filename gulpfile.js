@@ -21,7 +21,7 @@ function build(mode, done) {
     },
     output: {
       path: "dist/js",
-      filename: mode === DEV ? "[name].js" : "[name].min.js"
+      filename: mode !== PROD ? "[name].js" : "[name].min.js"
     },
     module: {
       loaders: [
@@ -37,7 +37,7 @@ function build(mode, done) {
         {
           test: /\.less$/,
           exclude: /(node_modules|bower_components)/,
-          loader: mode === DEV
+          loader: mode !== PROD
             ? ExtractTextPlugin.extract("css?-minimize&sourceMap!autoprefixer?{browsers:['last 2 versions', 'ie 9']}!less?sourceMap")
             : ExtractTextPlugin.extract("css?minimize!autoprefixer?{browsers:['last 2 versions', 'ie 9']}!less")
         },
@@ -55,26 +55,32 @@ function build(mode, done) {
     },
     plugins: [
       new ExtractTextPlugin(
-        mode === DEV ? "../css/[name].css" : "../css/[name].min.css",
+        mode !== PROD ? "../css/[name].css" : "../css/[name].min.css",
         {allChunks: true}
       )
     ]
   };
 
   switch (mode) {
-  case DEV:
-    opts.watch = true;
-    opts.devtool = "inline-source-map";
-    break;
-  case PROD:
-    opts.plugins = opts.plugins.concat([
-      new webpack.DefinePlugin({
-        NODE_ENV: "production"
-      }),
-      new webpack.optimize.OccurenceOrderPlugin(),
-      new webpack.optimize.UglifyJsPlugin()
-    ]);
-    break;
+    case DEV:
+      opts.watch = true;
+      opts.devtool = "inline-source-map";
+      break;
+    case PROD:
+      opts.plugins = opts.plugins.concat([
+        new webpack.DefinePlugin({
+          NODE_ENV: "production"
+        }),
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.optimize.UglifyJsPlugin()
+      ]);
+      break;
+    default:
+      opts.plugins = opts.plugins.concat([
+        new webpack.DefinePlugin({
+          NODE_ENV: "production"
+        })
+      ]);
   }
 
   var firstTime = true;
@@ -108,6 +114,14 @@ gulp.task("watchBuild", function(done) {
 
 gulp.task("prodBuild", function(done) {
   return build(PROD, done);
+});
+
+gulp.task("defBuild", function(done) {
+  return build(3, done);
+});
+
+gulp.task("deployBuild", function(done) {
+  return runSeq("prodBuild", "defBuild", done);
 });
 
 function copyLibs(mode, done) {
@@ -193,23 +207,30 @@ gulp.task("browserSync", function() {
 });
 
 gulp.task("deploy", function(done) {
-  return runSeq("clean", "prodBuild", "prodCopyLibs", "copyInjectedFiles", "git-add", "git-commit", "git-push", done);
+  return runSeq("clean", "deployBuild", done);
 });
 
 gulp.task("git-add", function(){
-  return gulp.src(["./dist/css/*", "./dist/js/*"])
+  return gulp.src(["./dist/css/*", "./dist/js/*", "./src/*"])
     .pipe(git.add());
 });
 
 gulp.task("git-commit", function(){
-  return gulp.src(["./dist/css/*", "./dist/js/*"])
-    .pipe(git.commit("deploy commit"));
+  var time = new Date();
+  return gulp.src(["./dist/css/*", "./dist/js/*", "./src/*"])
+    .pipe(git.commit("deploy commit - " + time.toISOString(), function(err){
+      if(err){
+        console.log("Git commit error: " + err);
+      }
+    }));
 });
 
-gulp.task("git-push", function(){
-  git.push("origin", "master", function(err) {
+gulp.task("git-push", function(done){
+  git.push(function(err) {
     if(err){
       console.log("Git push error: " + err);
+    }else{
+      done();
     }
   });
 });
