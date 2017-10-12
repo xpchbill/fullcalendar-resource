@@ -174,7 +174,8 @@ export default class MaskFormatter {
     if (distance < 0 && caretPosition === value.length) {
       leftChars = nextCharsList;
     } else {
-      leftChars = take(inputCharsList, caretPosition).filter(char => value.indexOf(char) !== -1);
+      leftChars = take(inputCharsList, caretPosition)
+                    .filter(char => nextValue.indexOf(char) !== -1);
     }
     const targetChar = leftChars[leftChars.length - 1];
 
